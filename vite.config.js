@@ -1,5 +1,5 @@
 export default {
-  base: '/andrewlux-otech/epl-leicester/',
+  base: '/epl-leicester/',
   build: {
     rollupOptions: {
       output: {

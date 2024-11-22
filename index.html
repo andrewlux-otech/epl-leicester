@@ -8,56 +8,264 @@
 	<title>Scrollama: Sticky Overlay Example</title>
 	<meta name="description" content="Scrollama: Sticky Overlay Example" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="style.css" />
 	<style>
-		.step {
-			margin: 50vh 0;
-			padding: 20px;
-			font-size: 20px;
-		}
 		#scrolly {
-			text-align: center;
+			position: relative;
+			background-color: #f3f3f3;
+			padding: 1rem;
 		}
-		#chart-container {
+
+		article {
+			position: relative;
+			padding: 0;
+			max-width: 20rem;
+			margin: 0 auto;
+		}
+
+		figure {
+			position: -webkit-sticky;
 			position: sticky;
+			left: 0;
+			width: 100%;
+			margin: 0;
+			-webkit-transform: translate3d(0, 0, 0);
+			-moz-transform: translate3d(0, 0, 0);
+			transform: translate3d(0, 0, 0);
+			background-color: #8a8a8a;
+			z-index: 0;
+		}
+
+		figure p {
+			text-align: center;
+			padding: 1rem;
+			position: absolute;
 			top: 50%;
-			transform: translateY(100px); /* Off-screen initially */
-			opacity: 0; /* Fully transparent initially */
-			transition: transform 1s ease, opacity 1s ease; /* Smooth transition */
+			left: 50%;
+			-moz-transform: translate(-50%, -50%);
+			-webkit-transform: translate(-50%, -50%);
+			transform: translate(-50%, -50%);
+			font-size: 8rem;
+			font-weight: 900;
+			color: #fff;
 		}
 
-		.step.active #chart-container {
-			transform: translateY(0); /* Move into place */
-			opacity: 1; /* Make visible */
+		.step {
+			margin: 0 auto 2rem auto;
+			color: #fff;
+			background-color: rgba(0, 0, 0, 0.1);
 		}
 
+		.step:last-child {
+			margin-bottom: 0;
+		}
+
+		.step.is-active p {
+			background-color: goldenrod;
+			color: #3b3b3b;
+		}
+
+		.step p {
+			text-align: center;
+			padding: 1rem;
+			font-size: 1.5rem;
+			background-color: #3b3b3b;
+		}
 	</style>
-	<script type="module" src="src/index.js"></script>
-	<link rel="stylesheet" href="/style.css" />	
 </head>
 
 <body>
 	<main>
 		<section id="intro">
-			<h1 class="intro__hed">Leicester City</h1>
+			<h1 class="intro__hed">Intro</h1>
 			<p class="intro__dek">
-				How did they do it?
+				Description
 			</p>
 		</section>
 
-		<section id="scrolly">  
-		  <div id="chart-container">
-			<div id="chart"></div>
-		  </div>
-			<div id="text">
-				<div class="step" data-step="1">Average value...</div>
-				<div class="step" data-step="2">...third from the bottom</div>
-				<div class="step" data-step="3">...for less than 2 percent of the total!</div>
-				<div class="step" data-step="4"></div>
-			</div>
+		<section id="scrolly">
+			<figure>
+				<p id="chart"></p>
+			</figure>
+
+			<article>
+				<div class="step" data-step="1">
+					<p>First caption</p>
+				</div>
+				<div class="step" data-step="2">
+					<p>...second caption</p>
+				</div>
+				<div class="step" data-step="3">
+					<p>...third caption</p>
+				</div>
+				<div class="step" data-step="4">
+					<p>...fourth caption</p>
+				</div>
+			</article>
 		</section>
 
 		<section id="outro"></section>
 	</main>
+
+	
+	<script type="module" src="src/index.js"></script>
+	<script type="module">
+		import scrollama from "scrollama";
+import * as d3 from "d3";
+		// using d3 for convenience
+		var main = d3.select("main");
+		var scrolly = main.select("#scrolly");
+		var figure = scrolly.select("figure");
+		var article = scrolly.select("article");
+		var step = article.selectAll(".step");
+
+		// initialize the scrollama
+		var scroller = scrollama();
+
+		
+
+const data = [
+	{ "name": "Chelsea", "value_eur": 23950000 },
+	{ "name": "Manchester City", "value_eur": 20750000 },
+	{ "name": "Arsenal", "value_eur": 19075000 },
+	{ "name": "Manchester United", "value_eur": 18060000 }, 
+	{ "name": "Liverpool", "value_eur": 13925000 },				
+	{ "name": "Tottenham Hotspur", "value_eur": 11215000 },
+	{ "name": "Everton", "value_eur": 9125000 },
+	{ "name": "Stoke City", "value_eur": 6865000 },
+	{ "name": "Southampton", "value_eur": 6823750 },
+	{ "name": "Swansea City", "value_eur": 6560000 },									
+	{ "name": "Newcastle United", "value_eur": 6435000 },
+	{ "name": "West Ham United", "value_eur": 6075000 },											
+	{ "name": "Aston Villa", "value_eur": 5090000 },
+	{ "name": "Sunderland", "value_eur": 4800000 },
+	{ "name": "West Bromwich Albion", "value_eur": 4780000 },
+	{ "name": "Crystal Palace", "value_eur": 4255000 },
+	{ "name": "Watford", "value_eur": 3635000 },
+	{ "name": "Leicester City", "value_eur": 3587500 },
+	{ "name": "Norwich City", "value_eur": 2940000 },
+	{ "name": "Bournemouth", "value_eur": 2843750 }
+	
+];
+
+const margin = { top: 20, right: 30, bottom: 40, left: 150 };
+const width = 800 - margin.left - margin.right;
+const height = 600 - margin.top - margin.bottom;
+
+// Append the SVG object to the chart container
+const svg = d3.select("#chart")
+  .append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", `translate(${margin.left},${margin.top})`);
+
+// Scales
+const x = d3.scaleLinear()
+  .domain([0, d3.max(data, d => d.value_eur / 1000000)])
+  .range([0, width]);
+
+const y = d3.scaleBand()
+  .domain(data.map(d => d.name))
+  .range([0, height])
+  .padding(0.1);
+
+// Bars
+svg.selectAll(".bar")
+  .data(data)
+  .enter()
+  .append("rect")
+  .attr("class", "bar")
+  .attr("x", 0)
+  .attr("y", d => y(d.name))
+  .attr("width", d => x(d.value_eur / 1000000))
+  .attr("height", y.bandwidth())
+  .style("fill", "steelblue");
+
+// Axes
+svg.append("g")
+  .attr("class", "x-axis")
+  .attr("transform", `translate(0,${height})`)
+  .call(d3.axisBottom(x));
+
+svg.append("g")
+  .attr("class", "y-axis")
+  .call(d3.axisLeft(y));
+
+  
+svg.selectAll(".label")
+.data(data)
+.enter()
+.append("text")
+.attr("class", "label")
+.attr("x", d => x(d.value_eur / 1000000) + 5) // Position label slightly to the right of the bar
+.attr("y", d => y(d.name) + y.bandwidth() / 2) // Center label vertically within the bar
+.attr("dy", "0.35em") // Adjust for vertical alignment
+.text(d => '') // Display the value of the bar
+.style("fill", "black")
+.style("font-size", "16px");
+
+		// generic window resize listener event
+		function handleResize() {
+			// 1. update height of step elements
+			var stepH = Math.floor(window.innerHeight * 0.75);
+			step.style("height", stepH + "px");
+
+			var figureHeight = window.innerHeight / 2;
+			var figureMarginTop = (window.innerHeight - figureHeight) / 2;
+
+			figure
+				.style("height", figureHeight + "px")
+				.style("top", figureMarginTop + "px");
+
+			// 3. tell scrollama to update new element dimensions
+			scroller.resize();
+		}
+
+		// scrollama event handlers
+		function handleStepEnter(response) {
+			// response = { element, direction, index }
+
+			const step = response.element.dataset.step;
+			// add color to current step only
+			d3.selectAll(".step").classed("is-active", function (d, i) {
+				return i === response.index;
+			});
+
+			// update graphic based on step
+			// figure.select("p").text(response.index + 1);
+			if (step >= 2) {
+				d3.selectAll(".bar")
+				.style("fill", (d, i) => i === 17 ? "#003090" : "steelblue");
+			}
+			if (step >= 3) {
+				// Add captions (labels) on the bars
+				svg.selectAll(".label")
+				.text((d, i) => i === 17 ?  d.value_eur : '');
+			} 
+		}
+
+
+		function init() {
+
+			// 1. force a resize on load to ensure proper dimensions are sent to scrollama
+			handleResize();
+
+			// 2. setup the scroller passing options
+			// 		this will also initialize trigger observations
+			// 3. bind scrollama event handlers (this can be chained like below)
+			scroller
+				.setup({
+					step: "#scrolly article .step",
+					offset: 0.33,
+					debug: false
+				})
+				.onStepEnter(handleStepEnter);
+		}
+
+		// kick things off
+		init();
+	</script>
 </body>
 
 </html>

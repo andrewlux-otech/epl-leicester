@@ -1,64 +1,133 @@
 import scrollama from "scrollama";
 import * as d3 from "d3";
 
-		// using d3 for convenience
-		var main = d3.select("main");
-		var scrolly = main.select("#scrolly");
-		var figure = scrolly.select("figure");
-		var article = scrolly.select("article");
-		var step = article.selectAll(".step");
+// Set up the dimensions and margins of the chart
+const margin = { top: 20, right: 30, bottom: 40, left: 90 };
+const width = 800 - margin.left - margin.right;
+const height = 400 - margin.top - margin.bottom;
 
-		// initialize the scrollama
-		var scroller = scrollama();
+// Append the SVG object to the chart container
+const svg = d3.select("#chart")
+  .append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", `translate(${margin.left},${margin.top})`);
 
-		// generic window resize listener event
-		function handleResize() {
-			// 1. update height of step elements
-			var stepH = Math.floor(window.innerHeight * 0.75);
-			step.style("height", stepH + "px");
+// Dummy data
+// const data = [
+//   { name: "A", value: 30 },
+//   { name: "B", value: 80 },
+//   { name: "C", value: 45 },
+//   { name: "D", value: 60 },
+//   { name: "E", value: 20 }
+// ];
 
-			var figureHeight = window.innerHeight / 2;
-			var figureMarginTop = (window.innerHeight - figureHeight) / 2;
+const data = [
+	{ "name": "Chelsea", "value_eur": 23950000 },
+	{ "name": "Manchester City", "value_eur": 20750000 },
+	{ "name": "Arsenal", "value_eur": 19075000 },
+	{ "name": "Manchester United", "value_eur": 18060000 }, 
+	{ "name": "Liverpool", "value_eur": 13925000 },				
+	{ "name": "Tottenham Hotspur", "value_eur": 11215000 },
+	{ "name": "Everton", "value_eur": 9125000 },
+	{ "name": "Stoke City", "value_eur": 6865000 },
+	{ "name": "Southampton", "value_eur": 6823750 },
+	{ "name": "Swansea City", "value_eur": 6560000 },									
+	{ "name": "Newcastle United", "value_eur": 6435000 },
+	{ "name": "West Ham United", "value_eur": 6075000 },											
+	{ "name": "Aston Villa", "value_eur": 5090000 },
+	{ "name": "Sunderland", "value_eur": 4800000 },
+	{ "name": "West Bromwich Albion", "value_eur": 4780000 },
+	{ "name": "Crystal Palace", "value_eur": 4255000 },
+	{ "name": "Watford", "value_eur": 3635000 },
+	{ "name": "Leicester City", "value_eur": 3587500 },
+	{ "name": "Norwich City", "value_eur": 2940000 },
+	{ "name": "Bournemouth", "value_eur": 2843750 }
+	
+];
 
-			figure
-				.style("height", figureHeight + "px")
-				.style("top", figureMarginTop + "px");
+// Scales
+const x = d3.scaleLinear()
+  .domain([0, d3.max(data, d => d.value_eur)])
+  .range([0, width]);
 
-			// 3. tell scrollama to update new element dimensions
-			scroller.resize();
-		}
+const y = d3.scaleBand()
+  .domain(data.map(d => d.name))
+  .range([0, height])
+  .padding(0.1);
 
-		// scrollama event handlers
-		function handleStepEnter(response) {
-			console.log(response);
-			// response = { element, direction, index }
+// Bars
+svg.selectAll(".bar")
+  .data(data)
+  .enter()
+  .append("rect")
+  .attr("class", "bar")
+  .attr("x", 0)
+  .attr("y", d => y(d.name))
+  .attr("width", d => x(d.value_eur))
+  .attr("height", y.bandwidth())
+  .style("fill", "steelblue");
 
-			// add color to current step only
-			step.classed("is-active", function (d, i) {
-				return i === response.index;
-			});
+// Axes
+svg.append("g")
+  .attr("class", "x-axis")
+  .attr("transform", `translate(0,${height})`)
+  .call(d3.axisBottom(x));
 
-			// update graphic based on step
-			figure.select("img").attr("src", "epl-" + (response.index + 1) + ".png");
-		}
+svg.append("g")
+  .attr("class", "y-axis")
+  .call(d3.axisLeft(y));
+
+  
+svg.selectAll(".label")
+.data(data)
+.enter()
+.append("text")
+.attr("class", "label")
+.attr("x", d => x(d.value_eur) + 5) // Position label slightly to the right of the bar
+.attr("y", d => y(d.name) + y.bandwidth() / 2) // Center label vertically within the bar
+.attr("dy", "0.35em") // Adjust for vertical alignment
+.text(d => '') // Display the value of the bar
+.style("fill", "black")
+.style("font-size", "12px");
 
 
-		function init() {
+// Initialize Scrollama
+const scroller = scrollama();
 
-			// 1. force a resize on load to ensure proper dimensions are sent to scrollama
-			handleResize();
+// Step activation function
+function handleStepEnter(response) {
+  // Add/remove active class on steps
+  d3.selectAll(".step")
+    .classed("active", (d, i) => i === response.index);
 
-			// 2. setup the scroller passing options
-			// 		this will also initialize trigger observations
-			// 3. bind scrollama event handlers (this can be chained like below)
-			scroller
-				.setup({
-					step: "#scrolly article .step",
-					offset: 0.33,
-					debug: false
-				})
-				.onStepEnter(handleStepEnter);
-		}
+  // Highlight bar on step
+  const step = response.element.dataset.step;
 
-		// kick things off
-		init();
+  if (step >= 2) {
+	d3.selectAll(".bar")
+    .style("fill", (d, i) => i === 17 ? "orange" : "steelblue");
+  } else {
+	d3.selectAll(".bar")
+    .style("fill", "steelblue");
+
+  }
+  if (step >= 3) {
+	// Add captions (labels) on the bars
+	svg.selectAll(".label")
+	.text((d, i) => i === 17 ?  d.value_eur : '');
+  } else {
+	svg.selectAll(".label")
+	.text((d, i) => '');
+  }
+}
+
+// Initialize Scrollama
+scroller
+  .setup({
+    step: ".step",
+    offset: 0.7, // Trigger when 70% of the viewport height is reached
+    debug: false // Enable debugging visuals
+  })
+  .onStepEnter(handleStepEnter);

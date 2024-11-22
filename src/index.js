@@ -123,11 +123,13 @@ function handleStepEnter(response) {
   }
 }
 
+var midpoint = Math.floor(window.innerHeight * 0.5) + "px";
+
 // Initialize Scrollama
 scroller
   .setup({
     step: ".step",
-    offset: 0.7, // Trigger when 70% of the viewport height is reached
+    offset: midpoint, // Trigger when 70% of the viewport height is reached
     debug: false // Enable debugging visuals
   })
   .onStepEnter(handleStepEnter);

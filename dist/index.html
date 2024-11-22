@@ -14,17 +14,25 @@
 			padding: 20px;
 			font-size: 20px;
 		}
-		#chart {
-			position: sticky;
-			top: 50%;
-			transform: translateY(-50%);
-		}
 		#scrolly {
 			text-align: center;
 		}
+		#chart-container {
+			position: sticky;
+			top: 50%;
+			transform: translateY(100px); /* Off-screen initially */
+			opacity: 0; /* Fully transparent initially */
+			transition: transform 1s ease, opacity 1s ease; /* Smooth transition */
+		}
+
+		.step.active #chart-container {
+			transform: translateY(0); /* Move into place */
+			opacity: 1; /* Make visible */
+		}
+
 	</style>
 	<link rel="stylesheet" href="/epl-leicester/style.css" />	
-  <script type="module" crossorigin src="/epl-leicester/assets/index-ChDeS94b.js"></script>
+  <script type="module" crossorigin src="/epl-leicester/assets/index-D42SchLo.js"></script>
 </head>
 
 <body>
@@ -36,8 +44,10 @@
 			</p>
 		</section>
 
-		<section id="scrolly">
+		<section id="scrolly">  
+		  <div id="chart-container">
 			<div id="chart"></div>
+		  </div>
 			<div id="text">
 				<div class="step" data-step="1">Average value...</div>
 				<div class="step" data-step="2">...third from the bottom</div>

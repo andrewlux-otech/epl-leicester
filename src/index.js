@@ -95,16 +95,18 @@ svg.selectAll(".label")
 
 // Initialize Scrollama
 const scroller = scrollama();
+const chartContainer = d3.select("#chart-container");
 
 // Step activation function
 function handleStepEnter(response) {
-  // Add/remove active class on steps
-  d3.selectAll(".step")
-    .classed("active", (d, i) => i === response.index);
-
-  // Highlight bar on step
+  
   const step = response.element.dataset.step;
-
+  if (step === "1") {
+    // Bring in the chart
+    chartContainer
+      .style("opacity", 1) // Fully visible
+      .style("transform", "translateY(0)"); // Move to position
+  }
   if (step >= 2) {
 	d3.selectAll(".bar")
     .style("fill", (d, i) => i === 17 ? "orange" : "steelblue");

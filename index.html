@@ -8,56 +8,107 @@
 	<title>Scrollama: Sticky Overlay Example</title>
 	<meta name="description" content="Scrollama: Sticky Overlay Example" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="style.css" />
 	<style>
-		.step {
-			margin: 50vh 0;
-			padding: 20px;
-			font-size: 20px;
-		}
 		#scrolly {
-			text-align: center;
+			position: relative;
+			background-color: #f3f3f3;
+			padding: 1rem;
 		}
-		#chart-container {
+
+		article {
+			position: relative;
+			padding: 0;
+			max-width: 20rem;
+			margin: 0 auto;
+		}
+
+		figure {
+			position: -webkit-sticky;
 			position: sticky;
+			left: 0;
+			width: 100%;
+			margin: 0;
+			-webkit-transform: translate3d(0, 0, 0);
+			-moz-transform: translate3d(0, 0, 0);
+			transform: translate3d(0, 0, 0);
+			background-color: #8a8a8a;
+			z-index: 0;
+		}
+
+		figure p {
+			text-align: center;
+			padding: 1rem;
+			position: absolute;
 			top: 50%;
-			transform: translateY(100px); /* Off-screen initially */
-			opacity: 0; /* Fully transparent initially */
-			transition: transform 1s ease, opacity 1s ease; /* Smooth transition */
+			left: 50%;
+			-moz-transform: translate(-50%, -50%);
+			-webkit-transform: translate(-50%, -50%);
+			transform: translate(-50%, -50%);
+			font-size: 8rem;
+			font-weight: 900;
+			color: #fff;
 		}
 
-		.step.active #chart-container {
-			transform: translateY(0); /* Move into place */
-			opacity: 1; /* Make visible */
+		.step {
+			margin: 0 auto 2rem auto;
+			color: #fff;
+			background-color: rgba(0, 0, 0, 0.1);
 		}
 
-	</style>
-	<link rel="stylesheet" href="/epl-leicester/style.css" />	
-  <script type="module" crossorigin src="/epl-leicester/assets/index-D42SchLo.js"></script>
+		.step:last-child {
+			margin-bottom: 0;
+		}
+
+		.step.is-active p {
+			background-color: goldenrod;
+			color: #3b3b3b;
+		}
+
+		.step p {
+			text-align: center;
+			padding: 1rem;
+			font-size: 1.5rem;
+			background-color: #3b3b3b;
+		}
+	</style>
+  <script type="module" crossorigin src="/epl-leicester/assets/index-DwNMs3sk.js"></script>
 </head>
 
 <body>
 	<main>
 		<section id="intro">
-			<h1 class="intro__hed">Leicester City</h1>
+			<h1 class="intro__hed">Intro</h1>
 			<p class="intro__dek">
-				How did they do it?
+				Description
 			</p>
 		</section>
 
-		<section id="scrolly">  
-		  <div id="chart-container">
-			<div id="chart"></div>
-		  </div>
-			<div id="text">
-				<div class="step" data-step="1">Average value...</div>
-				<div class="step" data-step="2">...third from the bottom</div>
-				<div class="step" data-step="3">...for less than 2 percent of the total!</div>
-				<div class="step" data-step="4"></div>
-			</div>
+		<section id="scrolly">
+			<figure>
+				<p id="chart"></p>
+			</figure>
+
+			<article>
+				<div class="step" data-step="1">
+					<p>First caption</p>
+				</div>
+				<div class="step" data-step="2">
+					<p>...second caption</p>
+				</div>
+				<div class="step" data-step="3">
+					<p>...third caption</p>
+				</div>
+				<div class="step" data-step="4">
+					<p>...fourth caption</p>
+				</div>
+			</article>
 		</section>
 
 		<section id="outro"></section>
 	</main>
+
+	
 </body>
 
 </html>

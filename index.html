@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Scrollama Story - Stage 1</title>
+  <title>EPL - Leicester City</title>
   <link rel="stylesheet" href="style.css" />
   <style>
 #scrolly {
@@ -80,7 +80,7 @@
 <body>
   <main id="story"></main>
 
-  <script src="https://unpkg.com/page/page.js"></script>
+  <!-- <script src="https://unpkg.com/page/page.js"></script> -->
   <script type="module">
     import scrollama from "scrollama";
 	import * as d3 from 'd3';
@@ -324,8 +324,16 @@
 
 	initScrollama();
 
-    page("/epl-leicester/stage-2", () => {
-		stage = 2;
+   // page.start();
+
+    // Navigate to Stage 2 after scrolling through Stage 1
+    window.addEventListener("scroll", () => {
+      const scrollPosition = window.innerHeight + window.scrollY;
+      const documentHeight = document.documentElement.scrollHeight;
+
+	  if (stage === 1) {
+		if (scrollPosition >= documentHeight) {
+			stage = 2;
       document.getElementById("story").innerHTML = stage2Content;
 	  applyStyles({
   "#scrolly": {
@@ -380,18 +388,6 @@
   },
 });
       initScrollama();
-    });
-
-    page.start();
-
-    // Navigate to Stage 2 after scrolling through Stage 1
-    window.addEventListener("scroll", () => {
-      const scrollPosition = window.innerHeight + window.scrollY;
-      const documentHeight = document.documentElement.scrollHeight;
-
-	  if (stage === 1) {
-		if (scrollPosition >= documentHeight) {
-			page("/epl-leicester/stage-2");
 		}
 	  }
     });

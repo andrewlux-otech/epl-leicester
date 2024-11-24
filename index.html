@@ -1,16 +1,12 @@
-
 <!DOCTYPE html>
 <html>
-
 <head>
-	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>Scrollama: Sticky Overlay Example</title>
-	<meta name="description" content="Scrollama: Sticky Overlay Example" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<link rel="stylesheet" href="style.css" />
-	<style>
-		#scrolly {
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scrollama Story - Stage 1</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+#scrolly {
 			position: relative;
 			background-color: #f3f3f3;
 			padding: 1rem;
@@ -71,11 +67,28 @@
 			font-size: 1.5rem;
 			background-color: #3b3b3b;
 		}
-	</style>
-</head>
+		.step.is-exiting {
+			opacity: 0;
+			transform: translateY(-100px);
+		}
 
+		#outro {
+  			height: 100vh;
+		}
+  </style>
+</head>
 <body>
-	<main>
+  <main id="story"></main>
+
+  <script src="https://unpkg.com/page/page.js"></script>
+  <script type="module">
+    import scrollama from "scrollama";
+	import * as d3 from 'd3';
+
+	let stage = 1;
+
+    // Load Stage 1 Content
+    const stage1Content = `
 		<section id="intro">
 			<h1 class="intro__hed">Intro</h1>
 			<p class="intro__dek">
@@ -105,108 +118,40 @@
 		</section>
 
 		<section id="outro"></section>
-	</main>
+    `;
 
+    // Load Stage 2 Content
+    const stage2Content = `
 	
-	<script type="module" src="src/index.js"></script>
-	<script type="module">
-		import scrollama from "scrollama";
-import * as d3 from "d3";
-		// using d3 for convenience
-		var main = d3.select("main");
-		var scrolly = main.select("#scrolly");
-		var figure = scrolly.select("figure");
-		var article = scrolly.select("article");
-		var step = article.selectAll(".step");
 
-		// initialize the scrollama
-		var scroller = scrollama();
+		<section id="outro"></section>
+<section id="scrolly">
+			<article>
+				<div class="step" data-step="1">
+					<p>STEP 1</p>
+				</div>
+				<div class="step" data-step="2">
+					<p>STEP 2</p>
+				</div>
+				<div class="step" data-step="3">
+					<p>STEP 3</p>
+				</div>
+				<div class="step" data-step="4">
+					<p>STEP 4</p>
+				</div>
+			</article>
 
-		
+			<figure>
+				<p>0</p>
+			</figure>
+		</section>
+	  
 
-const data = [
-	{ "name": "Chelsea", "value_eur": 23950000 },
-	{ "name": "Manchester City", "value_eur": 20750000 },
-	{ "name": "Arsenal", "value_eur": 19075000 },
-	{ "name": "Manchester United", "value_eur": 18060000 }, 
-	{ "name": "Liverpool", "value_eur": 13925000 },				
-	{ "name": "Tottenham Hotspur", "value_eur": 11215000 },
-	{ "name": "Everton", "value_eur": 9125000 },
-	{ "name": "Stoke City", "value_eur": 6865000 },
-	{ "name": "Southampton", "value_eur": 6823750 },
-	{ "name": "Swansea City", "value_eur": 6560000 },									
-	{ "name": "Newcastle United", "value_eur": 6435000 },
-	{ "name": "West Ham United", "value_eur": 6075000 },											
-	{ "name": "Aston Villa", "value_eur": 5090000 },
-	{ "name": "Sunderland", "value_eur": 4800000 },
-	{ "name": "West Bromwich Albion", "value_eur": 4780000 },
-	{ "name": "Crystal Palace", "value_eur": 4255000 },
-	{ "name": "Watford", "value_eur": 3635000 },
-	{ "name": "Leicester City", "value_eur": 3587500 },
-	{ "name": "Norwich City", "value_eur": 2940000 },
-	{ "name": "Bournemouth", "value_eur": 2843750 }
-	
-];
+		<section id="outro"></section>
+    `;
 
-const margin = { top: 20, right: 30, bottom: 40, left: 150 };
-const width = 800 - margin.left - margin.right;
-const height = 600 - margin.top - margin.bottom;
-
-// Append the SVG object to the chart container
-const svg = d3.select("#chart")
-  .append("svg")
-  .attr("width", width + margin.left + margin.right)
-  .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-  .attr("transform", `translate(${margin.left},${margin.top})`);
-
-// Scales
-const x = d3.scaleLinear()
-  .domain([0, d3.max(data, d => d.value_eur / 1000000)])
-  .range([0, width]);
-
-const y = d3.scaleBand()
-  .domain(data.map(d => d.name))
-  .range([0, height])
-  .padding(0.1);
-
-// Bars
-svg.selectAll(".bar")
-  .data(data)
-  .enter()
-  .append("rect")
-  .attr("class", "bar")
-  .attr("x", 0)
-  .attr("y", d => y(d.name))
-  .attr("width", d => x(d.value_eur / 1000000))
-  .attr("height", y.bandwidth())
-  .style("fill", "steelblue");
-
-// Axes
-svg.append("g")
-  .attr("class", "x-axis")
-  .attr("transform", `translate(0,${height})`)
-  .call(d3.axisBottom(x));
-
-svg.append("g")
-  .attr("class", "y-axis")
-  .call(d3.axisLeft(y));
-
-  
-svg.selectAll(".label")
-.data(data)
-.enter()
-.append("text")
-.attr("class", "label")
-.attr("x", d => x(d.value_eur / 1000000) + 5) // Position label slightly to the right of the bar
-.attr("y", d => y(d.name) + y.bandwidth() / 2) // Center label vertically within the bar
-.attr("dy", "0.35em") // Adjust for vertical alignment
-.text(d => '') // Display the value of the bar
-.style("fill", "black")
-.style("font-size", "16px");
-
-		// generic window resize listener event
-		function handleResize() {
+			// generic window resize listener event
+			function handleResize() {
 			// 1. update height of step elements
 			var stepH = Math.floor(window.innerHeight * 0.75);
 			step.style("height", stepH + "px");
@@ -219,14 +164,14 @@ svg.selectAll(".label")
 				.style("top", figureMarginTop + "px");
 
 			// 3. tell scrollama to update new element dimensions
-			scroller.resize();
+			// scroller.resize();
 		}
 
 		// scrollama event handlers
 		function handleStepEnter(response) {
 			// response = { element, direction, index }
 
-			const step = response.element.dataset.step;
+			const _step = response.element.dataset.step;
 			// add color to current step only
 			d3.selectAll(".step").classed("is-active", function (d, i) {
 				return i === response.index;
@@ -234,38 +179,222 @@ svg.selectAll(".label")
 
 			// update graphic based on step
 			// figure.select("p").text(response.index + 1);
-			if (step >= 2) {
+			if (_step >= 2) {
 				d3.selectAll(".bar")
 				.style("fill", (d, i) => i === 17 ? "#003090" : "steelblue");
 			}
-			if (step >= 3) {
+			if (_step >= 3) {
 				// Add captions (labels) on the bars
 				svg.selectAll(".label")
 				.text((d, i) => i === 17 ?  d.value_eur : '');
 			} 
 		}
 
-
-		function init() {
-
-			// 1. force a resize on load to ensure proper dimensions are sent to scrollama
-			handleResize();
-
-			// 2. setup the scroller passing options
-			// 		this will also initialize trigger observations
-			// 3. bind scrollama event handlers (this can be chained like below)
-			scroller
-				.setup({
-					step: "#scrolly article .step",
-					offset: 0.33,
-					debug: false
-				})
-				.onStepEnter(handleStepEnter);
+		function applyStyles(styles) {
+				Object.entries(styles).forEach(([selector, rules]) => {
+				const elements = document.querySelectorAll(selector);
+				elements.forEach(element => {
+					Object.entries(rules).forEach(([property, value]) => {
+					element.style[property] = value;
+					});
+				});
+			});
 		}
 
-		// kick things off
-		init();
-	</script>
-</body>
+    // Scrollama Initialization
+    function initScrollama() {
+		main = d3.select("main");
+		scrolly = main.select("#scrolly");
+		figure = scrolly.select("figure");
+		article = scrolly.select("article");
+		step = article.selectAll(".step");
 
+		const scroller = scrollama();
+		// 1. force a resize on load to ensure proper dimensions are sent to scrollama
+		handleResize();
+		scroller.resize();
+
+		// 2. setup the scroller passing options
+		// 		this will also initialize trigger observations
+		// 3. bind scrollama event handlers (this can be chained like below)
+		scroller
+			.setup({
+				step: "#scrolly article .step",
+				offset: 0.33,
+				debug: false
+			})
+			.onStepEnter(handleStepEnter);
+
+			window.scrollTo(0, 0);
+    }
+		
+
+	const data = [
+		{ "name": "Chelsea", "value_eur": 23950000 },
+		{ "name": "Manchester City", "value_eur": 20750000 },
+		{ "name": "Arsenal", "value_eur": 19075000 },
+		{ "name": "Manchester United", "value_eur": 18060000 }, 
+		{ "name": "Liverpool", "value_eur": 13925000 },				
+		{ "name": "Tottenham Hotspur", "value_eur": 11215000 },
+		{ "name": "Everton", "value_eur": 9125000 },
+		{ "name": "Stoke City", "value_eur": 6865000 },
+		{ "name": "Southampton", "value_eur": 6823750 },
+		{ "name": "Swansea City", "value_eur": 6560000 },									
+		{ "name": "Newcastle United", "value_eur": 6435000 },
+		{ "name": "West Ham United", "value_eur": 6075000 },											
+		{ "name": "Aston Villa", "value_eur": 5090000 },
+		{ "name": "Sunderland", "value_eur": 4800000 },
+		{ "name": "West Bromwich Albion", "value_eur": 4780000 },
+		{ "name": "Crystal Palace", "value_eur": 4255000 },
+		{ "name": "Watford", "value_eur": 3635000 },
+		{ "name": "Leicester City", "value_eur": 3587500 },
+		{ "name": "Norwich City", "value_eur": 2940000 },
+		{ "name": "Bournemouth", "value_eur": 2843750 }
+		
+	];
+
+	
+
+	document.getElementById("story").innerHTML = stage1Content;
+
+			// using d3 for convenience
+			var main = d3.select("main");
+		var scrolly = main.select("#scrolly");
+		var figure = scrolly.select("figure");
+		var article = scrolly.select("article");
+		var step = article.selectAll(".step");
+
+	const margin = { top: 20, right: 30, bottom: 40, left: 150 };
+	const width = 800 - margin.left - margin.right;
+	const height = 600 - margin.top - margin.bottom;
+
+	// Append the SVG object to the chart container
+	const svg = d3.select("#chart")
+	.append("svg")
+	.attr("width", width + margin.left + margin.right)
+	.attr("height", height + margin.top + margin.bottom)
+	.append("g")
+	.attr("transform", `translate(${margin.left},${margin.top})`);
+
+	// Scales
+	const x = d3.scaleLinear()
+	.domain([0, d3.max(data, d => d.value_eur / 1000000)])
+	.range([0, width]);
+
+	const y = d3.scaleBand()
+	.domain(data.map(d => d.name))
+	.range([0, height])
+	.padding(0.1);
+
+	// Bars
+	svg.selectAll(".bar")
+	.data(data)
+	.enter()
+	.append("rect")
+	.attr("class", "bar")
+	.attr("x", 0)
+	.attr("y", d => y(d.name))
+	.attr("width", d => x(d.value_eur / 1000000))
+	.attr("height", y.bandwidth())
+	.style("fill", "steelblue");
+
+	// Axes
+	svg.append("g")
+	.attr("class", "x-axis")
+	.attr("transform", `translate(0,${height})`)
+	.call(d3.axisBottom(x));
+
+	svg.append("g")
+	.attr("class", "y-axis")
+	.call(d3.axisLeft(y));
+
+	
+	svg.selectAll(".label")
+	.data(data)
+	.enter()
+	.append("text")
+	.attr("class", "label")
+	.attr("x", d => x(d.value_eur / 1000000) + 5) // Position label slightly to the right of the bar
+	.attr("y", d => y(d.name) + y.bandwidth() / 2) // Center label vertically within the bar
+	.attr("dy", "0.35em") // Adjust for vertical alignment
+	.text(d => '') // Display the value of the bar
+	.style("fill", "black")
+	.style("font-size", "16px");
+
+
+	initScrollama();
+
+    page("/epl-leicester/stage-2", () => {
+		stage = 2;
+      document.getElementById("story").innerHTML = stage2Content;
+	  applyStyles({
+  "#scrolly": {
+    position: "relative",
+    display: "flex", // Modern browsers
+    backgroundColor: "#f3f3f3",
+    padding: "1rem",
+  },
+  "#scrolly > *": {
+    flex: "1",
+  },
+  article: {
+    position: "relative",
+    padding: "0 1rem",
+    maxWidth: "20rem",
+  },
+  figure: {
+    position: "sticky", // Modern browsers
+    width: "100%",
+    margin: "0",
+    transform: "translate3d(0, 0, 0)",
+    backgroundColor: "#8a8a8a",
+    zIndex: "0",
+  },
+  "figure p": {
+    textAlign: "center",
+    padding: "1rem",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    fontSize: "8rem",
+    fontWeight: "900",
+    color: "#fff",
+  },
+  ".step": {
+    margin: "0 auto 2rem auto",
+    backgroundColor: "#3b3b3b",
+    color: "#fff",
+  },
+  ".step:last-child": {
+    marginBottom: "0",
+  },
+  ".step.is-active": {
+    backgroundColor: "goldenrod",
+    color: "#3b3b3b",
+  },
+  ".step p": {
+    textAlign: "center",
+    padding: "1rem",
+    fontSize: "1.5rem",
+  },
+});
+      initScrollama();
+    });
+
+    page.start();
+
+    // Navigate to Stage 2 after scrolling through Stage 1
+    window.addEventListener("scroll", () => {
+      const scrollPosition = window.innerHeight + window.scrollY;
+      const documentHeight = document.documentElement.scrollHeight;
+
+	  if (stage === 1) {
+		if (scrollPosition >= documentHeight) {
+			page("/epl-leicester/stage-2");
+		}
+	  }
+    });
+  </script>
+</body>
 </html>

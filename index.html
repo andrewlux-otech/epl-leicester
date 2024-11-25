@@ -257,17 +257,35 @@ const stageMaharezContent = `
 				return i === response.index;
 			});
 
-			// update graphic based on step
-			// figure.select("p").text(response.index + 1);
-			if (_step >= 2) {
-				d3.selectAll(".bar")
-				.style("fill", (d, i) => i === 17 ? "#003090" : "steelblue");
+			if (stage == 1) {
+
+				// update graphic based on step
+				// figure.select("p").text(response.index + 1);
+				if (_step >= 2) {
+					d3.selectAll(".bar")
+					.style("fill", (d, i) => i === 17 ? "#003090" : "steelblue");
+				}
+				if (_step >= 3) {
+					// Add captions (labels) on the bars
+					svg.selectAll(".label")
+					.text((d, i) => i === 17 ?  d.value_eur : '');
+				} 
+
+				return;
 			}
-			if (_step >= 3) {
-				// Add captions (labels) on the bars
-				svg.selectAll(".label")
-				.text((d, i) => i === 17 ?  d.value_eur : '');
-			} 
+
+			if (stage == 5) {
+				if (_step == 2) {
+					d3.selectAll('#v1').attr('src', 'V2.PNG');
+				}
+				if (_step == 3) {
+					d3.selectAll('#v1').attr('src', 'V3.PNG');
+				}
+				if (_step == 4) {
+					d3.selectAll('#v1').attr('src', 'V4.PNG');
+				}
+				return;
+			}
 		}
 
 		function applyStyles(styles) {
@@ -586,6 +604,8 @@ const stageMaharezContent = `
 				transform: "translate3d(0, 0, 0)",
 				backgroundColor: "#8a8a8a",
 				zIndex: "0",
+				display: 'flex',
+				justifyContent: 'center',
 			},
 			"figure p": {
 				textAlign: "center",
@@ -615,6 +635,10 @@ const stageMaharezContent = `
 				padding: "1rem",
 				fontSize: "1.5rem",
 			},
+			"img": {
+				maxWidth: "720px",
+				alignSelf: "center"
+			}
 			};
 
     // Navigate to Stage 2 after scrolling through Stage 1
@@ -697,6 +721,45 @@ const stageMaharezContent = `
 			];
 
 			createRadar(mahrez, '#maharez', 'Riyad Maharez: Key Performance Metrics');
+			initScrollama();
+			
+			return;
+		}
+	  }
+
+	  if (stage === 4) {
+		if (scrollPosition >= documentHeight) {
+			stage = 5;
+			document.getElementById("story").innerHTML = `
+				<section id="outro"></section>
+				<section id="scrolly">
+					<article>
+						<div class="step" data-step="1">
+							<p>The concept of "Moneyball" has flipped the script on how sports teams scout and build their squads. Born in baseball, this revolutionary approach uses data and analytics to uncover hidden talent and maximize value. Instead of relying on gut instincts or traditional scouting, Moneyball relies on cold, hard numbers—like performance-to-cost ratios—to spot overlooked players who pack a punch. Its influence has spilled into football, where clubs are learning to find diamonds in the rough, delivering world-class results without spending a fortune.</p>
+						</div>
+						<div class="step" data-step="2">
+							<p>The Efficiency Matrix is like a football club’s treasure map, showing exactly where value hides. It balances two key factors: a player’s market value and their contribution on the pitch. The result? Players are placed into four categories: Undervalued Gems (players who give you more than you paid for), Big Spends (pricey stars who justify their cost), Inefficient Investments (low-cost players who still fail to deliver), and Expensive Risks (high-cost players who may not always match their hefty price tags). This tool helps clubs separate the stars from the duds and find the best bang for their buck.</p>
+						</div>
+						<div class="step" data-step="3">
+							<p>Leicester City’s recruitment team played a blinder by spotting value where others didn’t. N’Golo Kanté, signed for just €8 million, became the engine of their midfield, snapping up balls and winning hearts. Riyad Mahrez, a €500,000 bargain, brought creativity and flair that rivaled football’s elite. And then there’s Jamie Vardy, whose rise from a €1 million non-league signing to a Premier League Golden Boot winner is nothing short of legendary. These players led Leicester to the 2015-16 Premier League title, defying the odds and humiliating much wealthier clubs. The Efficiency Matrix makes sense of their success, revealing how underrated talent can conquer even the biggest names in the game.</p>
+						</div>	
+						<div class="step" data-step="4">
+							<p>Moneyball is more than just a strategy; it’s a blueprint for footballing success. By spending just €10 million to bring in Kanté, Mahrez, and Vardy, Leicester City created a €100 million goldmine while delivering an unforgettable Premier League triumph. Kanté’s energy, Mahrez’s skill, and Vardy’s killer instinct showed that with smart recruitment, you don’t need billions to compete with the giants. The Efficiency Matrix empowers clubs to replicate this success by pinpointing undervalued players and striking the right balance between big-name investments and hidden gems. In today’s football world, where budgets are under the microscope, this approach is the ultimate game-changer.</p>
+						</div>
+					</article>
+
+					<figure>
+						<img id="v1" src="V1.PNG" width="100%" />
+					</figure>
+				</section>
+			
+
+				<section id="outro"></section>
+			`;
+
+
+
+			applyStyles(sideScrollStyle);
 			initScrollama();
 			
 			return;

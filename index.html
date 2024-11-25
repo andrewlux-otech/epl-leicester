@@ -50,6 +50,11 @@
 			margin: 0 auto 2rem auto;
 			color: #fff;
 			background-color: rgba(0, 0, 0, 0.1);
+
+			display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 		}
 
 		.step:last-child {
@@ -121,34 +126,109 @@
     `;
 
     // Load Stage 2 Content
-    const stage2Content = `
+    const stageKanteContent = `
 	
 
 		<section id="outro"></section>
-<section id="scrolly">
+		<section id="scrolly">
 			<article>
 				<div class="step" data-step="1">
-					<p>STEP 1</p>
+					<p>Traditional Metrics</p>
+					<p>Kanté might have a lower number of goals and assists but will excel in minutes played and key passes. He’s the engine of the team, covering ground and supporting both defense and attack.</p>
 				</div>
 				<div class="step" data-step="2">
-					<p>STEP 2</p>
-				</div>
-				<div class="step" data-step="3">
-					<p>STEP 3</p>
-				</div>
-				<div class="step" data-step="4">
-					<p>STEP 4</p>
+					<p>Advanced Metrics</p>
+					<p>His xG (expected goals) and xA(expected assists) values may not be as high as Mahrez or Vardy, but his tackles and interceptions will be vital.</p>
 				</div>
 			</article>
 
 			<figure>
-				<p>0</p>
+				<p id="kante"></p>
 			</figure>
 		</section>
 	  
 
 		<section id="outro"></section>
     `;
+
+	const stageVardyContent = `
+	
+
+	<section id="outro"></section>
+	
+		
+		<section id="intro">
+			<p class="intro__dek">
+				Using advanced analytics, we can quantify the value of individual players in ways that traditional metrics (such as goals and assists) can't fully capture.
+				
+			</p>
+		</section>
+		
+	<section id="outro"></section>
+
+		<section id="intro">
+			<p class="intro__dek">For example:
+				<ul><li>xG and xA provide deeper insights into a player's ability to create and finish scoring opportunities.</li>
+				<li>Radar charts allow us to compare traditional football statistics alongside advanced metrics, helping to identify the key contributors to Leicester's success beyond just goal scorers.</li>
+				</ul>
+				</p>
+				</section>
+				
+	<section id="outro"></section>
+
+		<section id="intro">
+				<p class="intro__dek">
+				By comparing traditional metrics like height, weight, and goals with advanced analytics like xG(expected goals) and xA(expected average), we can see how Leicester City's star players—Vardy, Kanté, and Mahrez—contributed to their historic Premier League win. Data analytics not only helps identify standout performances but also helps clubs make informed decisions on tactics, recruitment, and player development.
+				</p>
+
+		</section>
+		
+	<section id="outro"></section>
+	<section id="scrolly">
+		<article>
+			<div class="step" data-step="1">
+				<p>Traditional Metrics</p>
+				<p>Vardy stands out for his goals scored, assists, and minutes played. His height and weight are also typical for a fast and mobile forward.</p>
+			</div>
+			<div class="step" data-step="2">
+				<p>Advanced Metrics</p>
+				<p>His xG (expected goals) and xA (expected assists) will show how clinical his finishing is compared to what’s expected.</p>
+			</div>
+		</article>
+
+		<figure>
+			<p id="vardy"></p>
+		</figure>
+	</section>
+  
+
+	<section id="outro"></section>
+`;
+
+const stageMaharezContent = `
+	
+
+	<section id="outro"></section>
+	<section id="scrolly">
+		<article>
+			<div class="step" data-step="1">
+				<p>Traditional Metrics</p>
+				<p>Maharez will excel in goals, assists, and dribbles, showcasing his creative and offensive qualities.</p>
+			</div>
+			<div class="step" data-step="2">
+				<p>Advanced Metrics</p>
+				<p>His xG and xA will highlight his involvement in creating and finishing chances, showcasing his technical prowess and efficiency.</p>
+			</div>
+		</article>
+
+		<figure>
+			<p id="maharez"></p>
+		</figure>
+	</section>
+  
+
+	<section id="outro"></section>
+`;
 
 			// generic window resize listener event
 			function handleResize() {
@@ -324,7 +404,218 @@
 
 	initScrollama();
 
+	function createRadar(data, chartId, title) {
+		const metrics = [...new Set(data.map(d => d.variable))]; // Extract unique metrics
+		const players = [...new Set(data.map(d => d.player_name))]; // Extract unique players
+
+		const width = 600, height = 600, margin = 50;
+		const radius = Math.min(width, height) / 2 - margin;
+		const levels = 5; // Number of concentric circles
+
+		// Create SVG
+		const svg = d3.select(chartId)
+		.append("svg")
+		.attr("width", width)
+		.attr("height", height)
+		.append("g")
+		.attr("transform", `translate(${width / 2}, ${height / 2})`);
+
+		// Scale for the radius
+		const rScale = d3.scaleLinear()
+		.domain([0, d3.max(data, d => d.value)])
+		.range([0, radius]);
+
+		// Angle for each axis
+		const angleSlice = (2 * Math.PI) / metrics.length;
+
+		// Draw concentric circles
+		for (let i = 1; i <= levels; i++) {
+		svg.append("circle")
+			.attr("cx", 0)
+			.attr("cy", 0)
+			.attr("r", (radius / levels) * i)
+			.style("fill", "none")
+			.style("stroke", "#ccc");
+		}
+
+		// Draw axes
+		metrics.forEach((metric, i) => {
+		const angle = angleSlice * i - Math.PI / 2;
+		const x = Math.cos(angle) * radius;
+		const y = Math.sin(angle) * radius;
+
+		// Axis line
+		svg.append("line")
+			.attr("x1", 0)
+			.attr("y1", 0)
+			.attr("x2", x)
+			.attr("y2", y)
+			.style("stroke", "#ccc");
+
+		// Axis label
+		svg.append("text")
+			.attr("x", x * 1.1)
+			.attr("y", y * 1.1)
+			.attr("text-anchor", x > 0 ? "start" : "end")
+			.style("font-size", "12px")
+			.text(metric);
+		});
+
+		// Draw polygons
+		players.forEach(player => {
+		const playerData = data.filter(d => d.player_name === player);
+		const pathData = metrics.map((metric, i) => {
+			const point = playerData.find(d => d.variable === metric) || { value: 0 };
+			const angle = angleSlice * i - Math.PI / 2;
+			const x = Math.cos(angle) * rScale(point.value);
+			const y = Math.sin(angle) * rScale(point.value);
+			return [x, y];
+		});
+
+		// Close the polygon
+		pathData.push(pathData[0]);
+
+		// Draw polygon
+		svg.append("path")
+			.attr("d", d3.line()(pathData))
+			.attr("class", "polygon")
+			.style("stroke", player === "N'Golo Kanté" ? "blue" : "red")
+			.style("fill", player === "N'Golo Kanté" ? "blue" : "red")
+			.style("fill-opacity", 0.1);
+		});
+
+		// Draw points
+		data.forEach(d => {
+		const angle = metrics.indexOf(d.variable) * angleSlice - Math.PI / 2;
+		const x = Math.cos(angle) * rScale(d.value);
+		const y = Math.sin(angle) * rScale(d.value);
+
+		svg.append("circle")
+			.attr("cx", x)
+			.attr("cy", y)
+			.attr("r", 4)
+			.attr("class", "dot")
+			.style("fill", d.metric_type === "Traditional" ? "red" : "blue")
+			.style("stroke", "#fff");
+		});
+
+		    // Add concentric circles and scale labels
+			for (let i = 1; i <= levels; i++) {
+      const levelValue = (d3.max(data, d => d.value) / levels) * i;
+      const circleRadius = (radius / levels) * i;
+
+      // Add circular gridlines
+      svg.append("circle")
+        .attr("cx", 0)
+        .attr("cy", 0)
+        .attr("r", circleRadius)
+        .style("fill", "none")
+        .style("stroke", "#ccc");
+
+      // Add scale labels (on top axis)
+      svg.append("text")
+        .attr("x", 0)
+        .attr("y", -circleRadius) // Align with the circle
+        .attr("text-anchor", "middle")
+        .style("font-size", "12px")
+        .style("fill", "#333")
+        .text(Math.round(levelValue));
+    }
+
+		// Add a title to the chart
+		svg.append("text")
+		.attr("x", 0) // Centered horizontally
+		.attr("y", height / 2 - 10) // Positioned above the chart
+		.attr("text-anchor", "middle") // Align the text to the center
+		.style("font-size", "18px")
+		.style("font-weight", "bold")
+		.text(title);
+
+
+		// Legend data
+		const legendData = [
+		{ color: "red", label: "Traditional" },
+		{ color: "blue", label: "Advanced" }
+		];
+
+		// Create legend
+		const legend = svg.append("g")
+		.attr("transform", `translate(${radius - 35}, -${radius})`); // Position legend near the top-right
+
+		legendData.forEach((d, i) => {
+		// Add legend circles
+		legend.append("circle")
+			.attr("cx", 10)
+			.attr("cy", i * 20)
+			.attr("r", 5)
+			.style("fill", d.color);
+
+		// Add legend text
+		legend.append("text")
+			.attr("x", 20)
+			.attr("y", i * 20 + 5)
+			.text(d.label)
+			.style("font-size", "12px")
+			.attr("alignment-baseline", "middle")
+			.attr("fill", "#333"); // Use a neutral color for text
+		});
+
+	}
+
    // page.start();
+
+   const sideScrollStyle = {
+			"#scrolly": {
+				position: "relative",
+				display: "flex", // Modern browsers
+				backgroundColor: "#f3f3f3",
+				padding: "1rem",
+			},
+			"#scrolly > *": {
+				flex: "1",
+			},
+			article: {
+				position: "relative",
+				padding: "0 1rem",
+				maxWidth: "50rem",
+			},
+			figure: {
+				position: "sticky", // Modern browsers
+				width: "100%",
+				margin: "0",
+				transform: "translate3d(0, 0, 0)",
+				backgroundColor: "#8a8a8a",
+				zIndex: "0",
+			},
+			"figure p": {
+				textAlign: "center",
+				padding: "1rem",
+				position: "absolute",
+				top: "50%",
+				left: "50%",
+				transform: "translate(-50%, -50%)",
+				fontSize: "8rem",
+				fontWeight: "900",
+				color: "#fff",
+			},
+			".step": {
+				margin: "0 auto 2rem auto",
+				backgroundColor: "#3b3b3b",
+				color: "#fff",
+			},
+			".step:last-child": {
+				marginBottom: "0",
+			},
+			".step.is-active": {
+				backgroundColor: "goldenrod",
+				color: "#3b3b3b",
+			},
+			".step p": {
+				textAlign: "center",
+				padding: "1rem",
+				fontSize: "1.5rem",
+			},
+			};
 
     // Navigate to Stage 2 after scrolling through Stage 1
     window.addEventListener("scroll", () => {
@@ -334,60 +625,81 @@
 	  if (stage === 1) {
 		if (scrollPosition >= documentHeight) {
 			stage = 2;
-      document.getElementById("story").innerHTML = stage2Content;
-	  applyStyles({
-  "#scrolly": {
-    position: "relative",
-    display: "flex", // Modern browsers
-    backgroundColor: "#f3f3f3",
-    padding: "1rem",
-  },
-  "#scrolly > *": {
-    flex: "1",
-  },
-  article: {
-    position: "relative",
-    padding: "0 1rem",
-    maxWidth: "20rem",
-  },
-  figure: {
-    position: "sticky", // Modern browsers
-    width: "100%",
-    margin: "0",
-    transform: "translate3d(0, 0, 0)",
-    backgroundColor: "#8a8a8a",
-    zIndex: "0",
-  },
-  "figure p": {
-    textAlign: "center",
-    padding: "1rem",
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    fontSize: "8rem",
-    fontWeight: "900",
-    color: "#fff",
-  },
-  ".step": {
-    margin: "0 auto 2rem auto",
-    backgroundColor: "#3b3b3b",
-    color: "#fff",
-  },
-  ".step:last-child": {
-    marginBottom: "0",
-  },
-  ".step.is-active": {
-    backgroundColor: "goldenrod",
-    color: "#3b3b3b",
-  },
-  ".step p": {
-    textAlign: "center",
-    padding: "1rem",
-    fontSize: "1.5rem",
-  },
-});
-      initScrollama();
+				document.getElementById("story").innerHTML = stageVardyContent;
+				applyStyles(sideScrollStyle);
+
+			const vardy = [
+				{"player_name": "Jamie Vardy", "variable": "height", "value": 100, "metric_type": "Advanced"},
+				{"player_name": "Jamie Vardy", "variable": "weight", "value": 75, "metric_type": "Advanced"},
+				{"player_name": "Jamie Vardy", "variable": "goals", "value": 100, "metric_type": "Traditional"},
+				{"player_name": "Jamie Vardy", "variable": "assists", "value": 60, "metric_type": "Traditional"},
+				{"player_name": "Jamie Vardy", "variable": "minutes_played", "value": 90, "metric_type": "Advanced"},
+				{"player_name": "Jamie Vardy", "variable": "xG", "value": 100, "metric_type": "Advanced"},
+				{"player_name": "Jamie Vardy", "variable": "xA", "value": 42, "metric_type": "Advanced"},
+				{"player_name": "Jamie Vardy", "variable": "shots", "value": 92, "metric_type": "Traditional"},
+				{"player_name": "Jamie Vardy", "variable": "key_passes", "value": 50, "metric_type": "Traditional"},
+				{"player_name": "Jamie Vardy", "variable": "dribbles", "value": 31, "metric_type": "Traditional"}
+			];
+
+
+			createRadar(vardy, '#vardy', 'Jamie Vardy: Key Performance Metrics');
+      		initScrollama();
+			return;
+		}
+	  }
+	  if (stage === 2) {
+		if (scrollPosition >= documentHeight) {
+			stage = 3;
+			document.getElementById("story").innerHTML = stageKanteContent;
+
+			applyStyles(sideScrollStyle);
+			
+
+
+			const kante = [
+				{"player_name": "N'Golo Kanté", "variable": "height", "value": 98, "metric_type": "Advanced"},
+				{"player_name": "N'Golo Kanté", "variable": "weight", "value": 68, "metric_type": "Advanced"},
+				{"player_name": "N'Golo Kanté", "variable": "goals", "value": 20, "metric_type": "Traditional"},
+				{"player_name": "N'Golo Kanté", "variable": "assists", "value": 35, "metric_type": "Traditional"},
+				{"player_name": "N'Golo Kanté", "variable": "minutes_played", "value": 100, "metric_type": "Advanced"},
+				{"player_name": "N'Golo Kanté", "variable": "xG", "value": 30, "metric_type": "Advanced"},
+				{"player_name": "N'Golo Kanté", "variable": "xA", "value": 25, "metric_type": "Advanced"},
+				{"player_name": "N'Golo Kanté", "variable": "shots", "value": 25, "metric_type": "Traditional"},
+				{"player_name": "N'Golo Kanté", "variable": "key_passes", "value": 30, "metric_type": "Traditional"},
+				{"player_name": "N'Golo Kanté", "variable": "dribbles", "value": 100, "metric_type": "Traditional"}
+			];
+
+			createRadar(kante, '#kante', 'N’Golo Kanté: Key Performance Metrics');
+			initScrollama();
+			
+			return;
+		}
+	  }
+	  if (stage === 3) {
+		if (scrollPosition >= documentHeight) {
+			stage = 4;
+			document.getElementById("story").innerHTML = stageMaharezContent;
+
+			applyStyles(sideScrollStyle);
+			
+
+			const mahrez = [
+				{"player_name": "Riyad Mahrez", "variable": "height", "value": 100, "metric_type": "Advanced"},
+				{"player_name": "Riyad Mahrez", "variable": "weight", "value": 68, "metric_type": "Advanced"},
+				{"player_name": "Riyad Mahrez", "variable": "goals", "value": 80, "metric_type": "Traditional"},
+				{"player_name": "Riyad Mahrez", "variable": "assists", "value": 100, "metric_type": "Traditional"},
+				{"player_name": "Riyad Mahrez", "variable": "minutes_played", "value": 90, "metric_type": "Advanced"},
+				{"player_name": "Riyad Mahrez", "variable": "xG", "value": 90, "metric_type": "Advanced"},
+				{"player_name": "Riyad Mahrez", "variable": "xA", "value": 63, "metric_type": "Advanced"},
+				{"player_name": "Riyad Mahrez", "variable": "shots", "value": 92, "metric_type": "Traditional"},
+				{"player_name": "Riyad Mahrez", "variable": "key_passes", "value": 100, "metric_type": "Traditional"},
+				{"player_name": "Riyad Mahrez", "variable": "dribbles", "value": 37, "metric_type": "Traditional"}
+			];
+
+			createRadar(mahrez, '#maharez', 'Riyad Maharez: Key Performance Metrics');
+			initScrollama();
+			
+			return;
 		}
 	  }
     });

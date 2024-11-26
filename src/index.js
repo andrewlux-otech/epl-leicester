@@ -2,15 +2,19 @@
 import scrollama from "scrollama";
 import * as d3 from 'd3';
 
-let stage = 2;
+let stage = 1;
 
 // Load Stage 1 Content
 const stage1Content = `
-    <section id="intro">
-        <h1 class="intro__hed">Intro</h1>
-        <p class="intro__dek">
-            Description
-        </p>
+    <section id="leicester">
+    </section>
+    <section style="height: 15vh;"></section>
+    <section id="champions"></section>
+    
+    <section id="players">
+        <img src="vardy.WEBP" width="400px" />
+        <img src="kante.WEBP" width="400px" />
+        <img src="maharez.WEBP" width="400px" />
     </section>
 
     <section id="scrolly">
@@ -63,29 +67,37 @@ const stageVardyContent = `
 
     
 <section id="intro">
+<div style="background-color: white; padding: 10px; border-radius: 5px;">
     <p>
         Using <strong>advanced analytics</strong>, we can quantify the value of individual players in ways that traditional metrics—such as <strong>goals</strong> and <strong>assists</strong>—can’t fully capture. By looking beyond surface-level statistics, we gain a deeper understanding of a player’s true impact on the game.
     </p>
+    </div>
 </section>
 
 <section id="outro"></section>
 
 <section id="intro">
-    <p ><strong>For example:</strong></p>
+
+<div style="background-color: white; padding: 10px; border-radius: 5px;">
+    <p><strong>For example:</strong></p>
     <ul>
         <li><strong>xG (expected goals)</strong> and <strong>xA (expected assists)</strong> provide deeper insights into a player’s ability to <strong>create</strong> and <strong>finish scoring opportunities</strong>.</li>
         <li><strong>Radar charts</strong> allow us to compare traditional football statistics alongside advanced metrics, helping to identify the <strong>key contributors</strong> to Leicester’s success beyond just goal scorers.</li>
     </ul>
+    </div>
 </section>
 
 <section id="outro"></section>
 
 <section id="intro">
+
+<div style="background-color: white; padding: 10px; border-radius: 5px;">
     <p>
         By comparing traditional metrics—like <strong>height</strong>, <strong>weight</strong>, and <strong>goals</strong>—with advanced analytics like <strong>xG (expected goals)</strong> and <strong>xA (expected assists)</strong>, we can see how Leicester City’s star players—<strong>Vardy</strong>, <strong>Kanté</strong>, and <strong>Mahrez</strong>—contributed to their historic Premier League win. 
         <br><br>
         <strong>Data analytics</strong> not only helps identify standout performances but also enables clubs to make <strong>informed decisions</strong> on tactics, recruitment, and player development, giving them a competitive edge in modern football.
     </p>
+    </div>
 </section>
 
     
@@ -126,6 +138,7 @@ const stageVardyContent = `
 
     <figure>
         <p id="vardy"></p>
+        <img id="profile" />
     </figure>
 </section>
 
@@ -181,22 +194,22 @@ const stageVardyContent = `
 
         myStep = _step;
 
-        if (stage == 1) {
+        // if (stage == 1) {
 
-            // update graphic based on step
-            // figure.select("p").text(response.index + 1);
-            if (_step >= 2) {
-                d3.selectAll(".bar")
-                .style("fill", (d, i) => i === 17 ? "#003090" : "steelblue");
-            }
-            if (_step >= 3) {
-                // Add captions (labels) on the bars
-                svg.selectAll(".label")
-                .text((d, i) => i === 17 ?  d.value_eur : '');
-            } 
+        //     // update graphic based on step
+        //     // figure.select("p").text(response.index + 1);
+        //     if (_step >= 2) {
+        //         d3.selectAll(".bar")
+        //         .style("fill", (d, i) => i === 17 ? "#003090" : "steelblue");
+        //     }
+        //     if (_step >= 3) {
+        //         // Add captions (labels) on the bars
+        //         svg.selectAll(".label")
+        //         .text((d, i) => i === 17 ?  d.value_eur : '');
+        //     } 
 
-            return;
-        }
+        //     return;
+        // }
 
         if (stage == 5) {
             if (_step == 2) {
@@ -279,7 +292,9 @@ function initScrollama({ onStepProgress = () => {} } = {}) {
 
 
 
-// document.getElementById("story").innerHTML = stage1Content;
+document.getElementById("story").innerHTML = stage1Content;
+
+initScrollama();
 
 //         // using d3 for convenience
         var main = d3.select("main");
@@ -513,7 +528,7 @@ const sideScrollStyle = {
         "#scrolly": {
             position: "relative",
             display: "flex", // Modern browsers
-            backgroundColor: "#FFF",
+            // backgroundColor: "#FFF",
             padding: "1rem",
         },
         "#scrolly > *": {
@@ -530,7 +545,7 @@ const sideScrollStyle = {
             width: "100%",
             margin: "0",
             transform: "translate3d(0, 0, 0)",
-            backgroundColor: "#FFF",
+            // backgroundColor: "#FFF",
             zIndex: "0",
             display: 'flex',
             justifyContent: 'center',
@@ -549,7 +564,7 @@ const sideScrollStyle = {
         },
         ".step": {
             margin: "0 auto 2rem auto",
-            backgroundColor: "#FFF",
+            // backgroundColor: "#FFF",
             color: "#fff",
             height: "100vh"
         },
@@ -604,6 +619,15 @@ const sideScrollStyle = {
             {"player_name": "Riyad Mahrez", "variable": "dribbles", "value": 37, "metric_type": "Traditional"}
         ];
 
+let prevStep = myStep;
+
+// Navigate to Stage 2 after scrolling through Stage 1
+window.addEventListener("scroll", () => {
+  const scrollPosition = window.innerHeight + window.scrollY;
+  const documentHeight = document.documentElement.scrollHeight;
+
+  if (stage === 1) {
+    if (scrollPosition >= documentHeight) {
         stage = 4;
             document.getElementById("story").innerHTML = stageVardyContent;
             applyStyles(sideScrollStyle);
@@ -624,11 +648,18 @@ const sideScrollStyle = {
 
         createRadar(vardy, '#vardy', 'Key Performance Metrics');
           initScrollama({ onStepProgress: ({ progress }) => {
+            if (progress === 1 && prevStep !== myStep) {
+                return;
+            }
+
+            prevStep = myStep;
             if (myStep == 1) {
                 createRadar(vardy.map((metric, i) => ({
                     ...metric,
                     value: metric.value * (1 - progress / 2) + kante[i].value * progress / 2
                 })), '#vardy', 'Key Performance Metrics');
+
+                d3.selectAll("#profile").attr('src', 'vardy.PNG');
             }
             if (myStep == 2) {
                 createRadar(vardy.map((metric, i) => ({
@@ -642,6 +673,7 @@ const sideScrollStyle = {
                     ...metric,
                     value: metric.value * (1 - progress / 2) + maharez[i].value * progress / 2
                 })), '#vardy', 'Key Performance Metrics');
+                d3.selectAll("#profile").attr('src', 'kante.PNG');
             }
             
             if (myStep == 4) {
@@ -650,19 +682,13 @@ const sideScrollStyle = {
                     value: metric.value * (0.5 - progress / 2) + maharez[i].value * (0.5 + progress / 2)
                 })), '#vardy', 'Key Performance Metrics');
             }
-            if (myStep > 5) {
+            if (myStep == 5) {
                 createRadar(maharez, '#vardy', 'Key Performance Metrics');
+                
+                
+                d3.selectAll("#profile").attr('src', 'maharez.PNG');
             }
           }});
-
-// Navigate to Stage 2 after scrolling through Stage 1
-window.addEventListener("scroll", () => {
-  const scrollPosition = window.innerHeight + window.scrollY;
-  const documentHeight = document.documentElement.scrollHeight;
-
-  if (stage === 1) {
-    if (scrollPosition >= documentHeight) {
-        
         return;
     }
   }
@@ -698,6 +724,8 @@ window.addEventListener("scroll", () => {
         stage = 5;
         document.getElementById("story").innerHTML = `
             <section id="outro"></section>
+            <section><article><img width="100%" src="moneyball.JPG" /></article></section>
+            <section style="height: 50vh;"></section>
             <section id="scrolly">
                 <article>
 <div class="step" data-step="1">

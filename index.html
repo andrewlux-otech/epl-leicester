@@ -9,7 +9,7 @@
 #scrolly {
 			position: relative;
 			/* background-color: #FFF; */
-			padding: 1rem;
+			/* padding: 1rem; */
 		}
 
 		article {
@@ -49,7 +49,7 @@
 		.step {
 			margin: 0 auto 2rem auto;
 			color: #fff;
-			background-color: rgba(0, 0, 0, 0.1);
+			/* background-color: rgba(0, 0, 0, 0.1); */
 
 			display: flex;
   flex-direction: column;
@@ -68,7 +68,7 @@
 			margin-bottom: 0;
 		}
 
-		.step p {
+		.step p{
 			text-align: left;
 			padding: 1rem;
 			font-size: 1.5rem;
@@ -87,7 +87,7 @@
 			margin-top: -75px;
 			z-index: 10;
 		}
-		#parallax-bg {
+		#parallax-bg, #parallax-bg-2 {
 			background-repeat: no-repeat;
 			background-position-x: center;
 		}
@@ -116,7 +116,7 @@
 			z-index: -1; /* Place behind foreground content */
 		}
 
-		#parallax-bg {
+		#parallax-bg, #parallax-bg-2 {
 			position: absolute;
 			top: 0;
 			left: 0;
@@ -128,6 +128,19 @@
 			will-change: transform; /* Optimize for performance */
 			z-index: -1;
 		}
+
+		#picture-container {
+			position: fixed; /* Fix the picture to the viewport */
+			top: 50%; /* Start vertically centered */
+			right: -200%; /* Start completely off-screen to the right */
+			transform: translateY(-50%); /* Center vertically */
+			z-index: 1;
+			}
+
+			#moving-picture {
+			max-width: 1350px; /* Adjust image size */
+			transition: transform 0.1s linear; /* Smooth scrolling effect */
+			}
 
 		/* article {
 			position: relative;
@@ -142,7 +155,7 @@
 			background: rgba(255, 255, 255, 0.9);
 		} */
   </style>
-  <script type="module" crossorigin src="/epl-leicester/assets/index-BlCcwXcW.js"></script>
+  <script type="module" crossorigin src="/epl-leicester/assets/index-1q5VOFOi.js"></script>
 </head>
 <body>
   <main id="story"></main>

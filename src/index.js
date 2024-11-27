@@ -6,39 +6,27 @@ let stage = 1;
 
 // Load Stage 1 Content
 const stage1Content = `
-    <section id="leicester">
-    </section>
-    <section style="height: 15vh;"></section>
-    <section id="champions"></section>
-    
-    <section id="players">
-        <img src="vardy.WEBP" width="400px" />
-        <img src="kante.WEBP" width="400px" />
-        <img src="maharez.WEBP" width="400px" />
-    </section>
+
+<div class="parallax-container">
+    <div id="parallax-bg" style="background-image: url('leicester.JPG');"></div>
+</div>
+
+
+<section style="height: 70vh;"></section>
 
     <section id="scrolly">
-        <figure>
-            <p id="chart"></p>
-        </figure>
-
         <article>
             <div class="step" data-step="1">
-                <p>First caption</p>
-            </div>
-            <div class="step" data-step="2">
-                <p>...second caption</p>
-            </div>
-            <div class="step" data-step="3">
-                <p>...third caption</p>
-            </div>
-            <div class="step" data-step="4">
-                <p>...fourth caption</p>
+            <div  id="players">
+                    <img src="vardy.WEBP" width="400px" />
+                    <img src="kante.WEBP" width="400px" />
+                    <img src="maharez.WEBP" width="400px" />
+                    </div>
             </div>
         </article>
     </section>
 
-    <section id="outro"></section>
+    <section style="height: 250vh;"></section>
 `;
 
 // Load Stage 2 Content
@@ -173,7 +161,7 @@ const stageVardyContent = `
         var figureMarginTop = (window.innerHeight - figureHeight) / 2;
 
         figure
-            .style("height", figureHeight + "px")
+            ?.style("height", figureHeight + "px")
             .style("top", figureMarginTop + "px");
 
         // 3. tell scrollama to update new element dimensions
@@ -236,8 +224,19 @@ const stageVardyContent = `
         });
     }
 
+    function handleParallaxScroll() {
+        const scrollPosition = window.scrollY;
+        const parallaxSpeedFactor = 0.5; // Adjust the speed of the background
+        parallaxBg.style.transform = `translateY(${scrollPosition * parallaxSpeedFactor}px)`;
+      }
+  
+      // Attach event listener to the window for parallax scrolling
+      window.addEventListener('scroll', handleParallaxScroll);
+
 // Scrollama Initialization
 function initScrollama({ onStepProgress = () => {} } = {}) {
+    
+        
     main = d3.select("main");
     scrolly = main.select("#scrolly");
     figure = scrolly.select("figure");
@@ -294,14 +293,20 @@ function initScrollama({ onStepProgress = () => {} } = {}) {
 
 document.getElementById("story").innerHTML = stage1Content;
 
+
+const parallaxBg = document.getElementById('parallax-bg');
+//         // using d3 for convenience
+var main = d3.select("main");
+var scrolly;
+var figure;
+var article;
+var step = main.selectAll(".section");
+
 initScrollama();
 
-//         // using d3 for convenience
-        var main = d3.select("main");
-    var scrolly = main.select("#scrolly");
-    var figure = scrolly.select("figure");
-    var article = scrolly.select("article");
-    var step = article.selectAll(".step");
+
+
+
 
 // const margin = { top: 20, right: 30, bottom: 40, left: 150 };
 // const width = 800 - margin.left - margin.right;
@@ -628,6 +633,7 @@ window.addEventListener("scroll", () => {
 
   if (stage === 1) {
     if (scrollPosition >= documentHeight) {
+
         stage = 4;
             document.getElementById("story").innerHTML = stageVardyContent;
             applyStyles(sideScrollStyle);

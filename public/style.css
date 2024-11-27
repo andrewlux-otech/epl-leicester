@@ -15,6 +15,7 @@ body {
   color: #3b3b3b;
   font-size: 24px;
   background-color: #003090 !important;
+  overflow-x: hidden;
 }
 
 p,
@@ -69,9 +70,11 @@ nav {
 }
 
 #intro {
-  max-width: 40rem;
+  max-width: 60rem;
   margin: 1rem auto;
   text-align: center;
+  font-size: 2rem;
+  color: white;
 }
 
 .intro__hed {

@@ -7,13 +7,15 @@ let stage = 1;
 // Load Stage 1 Content
 const stage1Content = `
 
+
 <div class="parallax-container">
     <div id="parallax-bg" style="background-image: url('leicester.JPG');"></div>
 </div>
-
+<div class="parallax-container">
+    <div id="parallax-bg-2" style="background-image: url('champions.JPG');"></div>
+</div>
 
 <section style="height: 70vh;"></section>
-
     <section id="scrolly">
         <article>
             <div class="step" data-step="1">
@@ -55,7 +57,7 @@ const stageVardyContent = `
 
     
 <section id="intro">
-<div style="background-color: white; padding: 10px; border-radius: 5px;">
+<div">
     <p>
         Using <strong>advanced analytics</strong>, we can quantify the value of individual players in ways that traditional metrics—such as <strong>goals</strong> and <strong>assists</strong>—can’t fully capture. By looking beyond surface-level statistics, we gain a deeper understanding of a player’s true impact on the game.
     </p>
@@ -66,7 +68,7 @@ const stageVardyContent = `
 
 <section id="intro">
 
-<div style="background-color: white; padding: 10px; border-radius: 5px;">
+<div>
     <p><strong>For example:</strong></p>
     <ul>
         <li><strong>xG (expected goals)</strong> and <strong>xA (expected assists)</strong> provide deeper insights into a player’s ability to <strong>create</strong> and <strong>finish scoring opportunities</strong>.</li>
@@ -79,7 +81,7 @@ const stageVardyContent = `
 
 <section id="intro">
 
-<div style="background-color: white; padding: 10px; border-radius: 5px;">
+<div>
     <p>
         By comparing traditional metrics—like <strong>height</strong>, <strong>weight</strong>, and <strong>goals</strong>—with advanced analytics like <strong>xG (expected goals)</strong> and <strong>xA (expected assists)</strong>, we can see how Leicester City’s star players—<strong>Vardy</strong>, <strong>Kanté</strong>, and <strong>Mahrez</strong>—contributed to their historic Premier League win. 
         <br><br>
@@ -171,78 +173,70 @@ const stageVardyContent = `
     let myStep;
 
     // scrollama event handlers
-    function handleStepEnter(response) {
-        // response = { element, direction, index }
+    // function handleStepEnter(response) {
+    //     // response = { element, direction, index }
 
-        const _step = response.element.dataset.step;
-        // add color to current step only
-        d3.selectAll(".step").classed("is-active", function (d, i) {
-            return i === response.index;
-        });
+    //     // if (stage == 1) {
 
-        myStep = _step;
+    //     //     // update graphic based on step
+    //     //     // figure.select("p").text(response.index + 1);
+    //     //     if (_step >= 2) {
+    //     //         d3.selectAll(".bar")
+    //     //         .style("fill", (d, i) => i === 17 ? "#003090" : "steelblue");
+    //     //     }
+    //     //     if (_step >= 3) {
+    //     //         // Add captions (labels) on the bars
+    //     //         svg.selectAll(".label")
+    //     //         .text((d, i) => i === 17 ?  d.value_eur : '');
+    //     //     } 
 
-        // if (stage == 1) {
+    //     //     return;
+    //     // }
 
-        //     // update graphic based on step
-        //     // figure.select("p").text(response.index + 1);
-        //     if (_step >= 2) {
-        //         d3.selectAll(".bar")
-        //         .style("fill", (d, i) => i === 17 ? "#003090" : "steelblue");
-        //     }
-        //     if (_step >= 3) {
-        //         // Add captions (labels) on the bars
-        //         svg.selectAll(".label")
-        //         .text((d, i) => i === 17 ?  d.value_eur : '');
-        //     } 
-
-        //     return;
-        // }
-
-        if (stage == 5) {
-            if (_step == 2) {
-                d3.select('#v1')
-                  .transition() // Add a transition
-                  .duration(500) // Specify the duration in milliseconds
-                  .style('opacity', 0) // Fade out
-                  .on('end', function () {
-                    d3.select(this)
-                      .attr('src', 'V2.PNG') // Update the image source
-                      .transition() // Add another transition
-                      .duration(500)
-                      .style('opacity', 1); // Fade back in
-                  });
-              }
-              if (_step == 3) {
-                d3.select('#v1')
-                  .transition()
-                  .duration(500)
-                  .style('opacity', 0)
-                  .on('end', function () {
-                    d3.select(this)
-                      .attr('src', 'V3.PNG')
-                      .transition()
-                      .duration(500)
-                      .style('opacity', 1);
-                  });
-              }
-              if (_step == 4) {
-                d3.select('#v1')
-                  .transition()
-                  .duration(500)
-                  .style('opacity', 0)
-                  .on('end', function () {
-                    d3.select(this)
-                      .attr('src', 'V4.PNG')
-                      .transition()
-                      .duration(500)
-                      .style('opacity', 1);
-                  });
-              }
+    //     // if (stage == 5) {
+    //     //     if (_step == 2) {
+    //     //         d3.select('#v1')
+    //     //           .transition() // Add a transition
+    //     //           .duration(500) // Specify the duration in milliseconds
+    //     //           .style('opacity', 0) // Fade out
+    //     //           .on('end', function () {
+    //     //             d3.select(this)
+    //     //               .attr('src', 'V2.PNG') // Update the image source
+    //     //               .transition() // Add another transition
+    //     //               .duration(500)
+    //     //               .style('opacity', 1); // Fade back in
+    //     //           });
+    //     //       }
+    //     //       if (_step == 3) {
+    //     //         d3.select('#v1')
+    //     //           .transition()
+    //     //           .duration(500)
+    //     //           .style('opacity', 0)
+    //     //           .on('end', function () {
+    //     //             d3.select(this)
+    //     //               .attr('src', 'V3.PNG')
+    //     //               .transition()
+    //     //               .duration(500)
+    //     //               .style('opacity', 1);
+    //     //           });
+    //     //       }
+    //     //       if (_step == 4) {
+    //     //         d3.select('#v1')
+    //     //           .transition()
+    //     //           .duration(500)
+    //     //           .style('opacity', 0)
+    //     //           .on('end', function () {
+    //     //             d3.select(this)
+    //     //               .attr('src', 'V4.PNG')
+    //     //               .transition()
+    //     //               .duration(500)
+    //     //               .style('opacity', 1);
+    //     //           });
+    //     //       }
               
-          }
+    //     //   }
           
-    }
+    // }
 
     function applyStyles(styles) {
             Object.entries(styles).forEach(([selector, rules]) => {
@@ -257,15 +251,17 @@ const stageVardyContent = `
 
     function handleParallaxScroll() {
         const scrollPosition = window.scrollY;
-        const parallaxSpeedFactor = 0.5; // Adjust the speed of the background
-        parallaxBg.style.transform = `translateY(${scrollPosition * parallaxSpeedFactor}px)`;
+        parallaxBg.style.transform = `translateY(${scrollPosition * 0.3}px)`;
+        
+        parallaxBg2.style.transform = `translateY(${scrollPosition * 0.5}px)`;
+        parallaxBg2.style.marginTop = `${1100 - scrollPosition / 3}px`;
       }
   
       // Attach event listener to the window for parallax scrolling
       window.addEventListener('scroll', handleParallaxScroll);
 
 // Scrollama Initialization
-function initScrollama({ onStepProgress = () => {} } = {}) {
+function initScrollama({ onStepProgress = () => {}, onStepEnter = () => {}, onStepExit = () => {} } = {}) {
     
         
     main = d3.select("main");
@@ -289,7 +285,8 @@ function initScrollama({ onStepProgress = () => {} } = {}) {
             debug: false,
             progress: true,
         })
-        .onStepEnter(handleStepEnter)
+        .onStepEnter(onStepEnter)
+        .onStepExit(onStepExit)
         .onStepProgress(onStepProgress);
 
         window.scrollTo(0, 0);
@@ -324,8 +321,14 @@ function initScrollama({ onStepProgress = () => {} } = {}) {
 
 document.getElementById("story").innerHTML = stage1Content;
 
+document.querySelectorAll('.step').forEach((el) => el.style.height = 'auto !important');
+
 
 let parallaxBg = document.getElementById('parallax-bg');
+
+let parallaxBg2 = document.getElementById('parallax-bg-2');
+
+parallaxBg2.style.marginTop = `1100px`;
 //         // using d3 for convenience
 var main = d3.select("main");
 var scrolly;
@@ -418,7 +421,7 @@ function createRadar(data, chartId, title) {
 
     // Scale for the radius
     const rScale = d3.scaleLinear()
-    .domain([0, d3.max(data, d => d.value)])
+    .domain([0, 100])
     .range([0, radius]);
 
     // Angle for each axis
@@ -497,7 +500,7 @@ function createRadar(data, chartId, title) {
 
         // Add concentric circles and scale labels
         for (let i = 1; i <= levels; i++) {
-  const levelValue = (d3.max(data, d => d.value) / levels) * i;
+  const levelValue = (100 / levels) * i;
   const circleRadius = (radius / levels) * i;
 
   // Add circular gridlines
@@ -683,17 +686,31 @@ window.addEventListener("scroll", () => {
         ];
 
 
-        createRadar(vardy, '#vardy', 'Key Performance Metrics');
-          initScrollama({ onStepProgress: ({ progress }) => {
+        createRadar(vardy.map((metric, i) => ({
+            ...metric,
+            value: 0
+        })), '#vardy', 'Key Performance Metrics');
+          initScrollama({ onStepEnter: (response) => {
+            
+
+            const _step = response.element.dataset.step;
+            // add color to current step only
+            d3.selectAll(".step").classed("is-active", function (d, i) {
+                return i === response.index;
+            });
+    
+            myStep = _step;
+        }, onStepProgress: ({ progress }) => {
             if (progress === 1 && prevStep !== myStep) {
                 return;
             }
 
             prevStep = myStep;
+            
             if (myStep == 1) {
                 createRadar(vardy.map((metric, i) => ({
                     ...metric,
-                    value: metric.value * (1 - progress / 2) + kante[i].value * progress / 2
+                    value: metric.value * progress / 2
                 })), '#vardy', 'Key Performance Metrics');
 
                 d3.selectAll("#profile").attr('src', 'vardy.PNG');
@@ -701,29 +718,40 @@ window.addEventListener("scroll", () => {
             if (myStep == 2) {
                 createRadar(vardy.map((metric, i) => ({
                     ...metric,
-                    value: metric.value * (0.5 - progress / 2) + kante[i].value * (0.5 + progress / 2)
+                    value: metric.value * (0.5 + progress / 2)
                 })), '#vardy', 'Key Performance Metrics');
             }
             if (myStep == 3) {
+                createRadar(vardy.map((metric, i) => ({
+                    ...metric,
+                    value: metric.value * (1 - progress / 2) + kante[i].value * progress / 2
+                })), '#vardy', 'Key Performance Metrics');
+
+                d3.selectAll("#profile").attr('src', 'kante.PNG');
+            }
+            if (myStep == 4) {
+                createRadar(vardy.map((metric, i) => ({
+                    ...metric,
+                    value: metric.value * (0.5 - progress / 2) + kante[i].value * (0.5 + progress / 2)
+                })), '#vardy', 'Key Performance Metrics');
+            }
+            if (myStep == 5) {
                 
                 createRadar(kante.map((metric, i) => ({
                     ...metric,
                     value: metric.value * (1 - progress / 2) + maharez[i].value * progress / 2
                 })), '#vardy', 'Key Performance Metrics');
-                d3.selectAll("#profile").attr('src', 'kante.PNG');
+                d3.selectAll("#profile").attr('src', 'maharez.PNG');
             }
             
-            if (myStep == 4) {
+            if (myStep == 6) {
                 createRadar(kante.map((metric, i) => ({
                     ...metric,
                     value: metric.value * (0.5 - progress / 2) + maharez[i].value * (0.5 + progress / 2)
                 })), '#vardy', 'Key Performance Metrics');
             }
-            if (myStep == 5) {
+            if (myStep == 7) {
                 createRadar(maharez, '#vardy', 'Key Performance Metrics');
-                
-                
-                d3.selectAll("#profile").attr('src', 'maharez.PNG');
             }
           }});
         return;
@@ -756,16 +784,20 @@ window.addEventListener("scroll", () => {
 //     }
 //   }
 
+let pictureContainer;
+
   if (stage === 4) {
     if (scrollPosition >= documentHeight) {
         stage = 5;
-        document.getElementById("story").innerHTML = `
+        document.getElementById("story").innerHTML = `           
+
+            <div id="picture-container">
+                <img id="moving-picture" src="moneyball_magic.PNG" alt="Crawling Picture" />
+            </div>
+            
+
             <section id="outro"></section>
             
-            
-        <div class="parallax-container" style="margin-top: 100vh;">
-            <div id="parallax-bg" style="background-image: url('moneyball.JPG');"></div>
-        </div>
             <section id="scrolly">
                 <article>
 <div class="step" data-step="1">
@@ -814,11 +846,96 @@ window.addEventListener("scroll", () => {
             <section id="outro"></section>
         `;
 
+        const pictureContainer = document.querySelector('#picture-container');
 
-        parallaxBg = document.getElementById('parallax-bg');
+        // Define scroll points
+        const crawlInStart = 100; // Start crawling in after 100px of scroll
+        const crawlInEnd = 500;   // Finish crawling in by 500px
+        const scrollUpStart = 500; // Start scrolling up after 500px
+        const scrollUpEnd = 1000;  // Finish scrolling up by 1000px
+
+        // Event listener for scroll
+        window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY;
+
+        // Crawl in from the right
+        if (scrollY >= crawlInStart && scrollY <= crawlInEnd) {
+            const progress = (scrollY - crawlInStart) / (crawlInEnd - crawlInStart);
+            pictureContainer.style.right = `${-100 + progress * 104}%`; // Moves from -100% to 10%
+            pictureContainer.style.transform = 'translateY(-50%)'; // Keep vertically centered
+        }
+
+        // Scroll up
+        if (scrollY > scrollUpStart && scrollY <= scrollUpEnd) {
+            const progress = (scrollY - scrollUpStart) / (scrollUpEnd - scrollUpStart);
+            pictureContainer.style.transform = `translateY(${(-50 - progress * 350)}%)`; // Move up off-screen
+        }
+
+        // Reset for scrolling back up
+        // if (scrollY < crawlInStart) {
+        //     pictureContainer.style.right = '-100%'; // Reset to off-screen
+        //     pictureContainer.style.transform = 'translateY(-50%)'; // Reset vertical position
+        // }
+        });
+
         //         // using d3 for convenience
         applyStyles(sideScrollStyle);
-        initScrollama();
+        initScrollama({ onStepEnter: (response) => {
+            
+
+        const _step = response.element.dataset.step;
+        // add color to current step only
+        d3.selectAll(".step").classed("is-active", function (d, i) {
+            return i === response.index;
+        });
+
+        myStep = _step;
+
+                if (response.index === 0) {
+                  // Step 1: Move the picture into view from the right
+                  pictureContainer.style.right = '10%'; // Adjust final position as needed
+                }
+
+                if (_step == 2) {
+                    d3.select('#v1')
+                        .transition() // Add a transition
+                        .duration(500) // Specify the duration in milliseconds
+                        .style('opacity', 0) // Fade out
+                        .on('end', function () {
+                        d3.select(this)
+                            .attr('src', 'V2.PNG') // Update the image source
+                            .transition() // Add another transition
+                            .duration(500)
+                            .style('opacity', 1); // Fade back in
+                        });
+                    }
+                    if (_step == 3) {
+                    d3.select('#v1')
+                        .transition()
+                        .duration(500)
+                        .style('opacity', 0)
+                        .on('end', function () {
+                        d3.select(this)
+                            .attr('src', 'V3.PNG')
+                            .transition()
+                            .duration(500)
+                            .style('opacity', 1);
+                        });
+                    }
+                    if (_step == 4) {
+                    d3.select('#v1')
+                        .transition()
+                        .duration(500)
+                        .style('opacity', 0)
+                        .on('end', function () {
+                        d3.select(this)
+                            .attr('src', 'V4.PNG')
+                            .transition()
+                            .duration(500)
+                            .style('opacity', 1);
+                        });
+                    }
+        }});
         
         return;
     }

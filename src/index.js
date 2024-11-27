@@ -201,16 +201,47 @@ const stageVardyContent = `
 
         if (stage == 5) {
             if (_step == 2) {
-                d3.selectAll('#v1').attr('src', 'V2.PNG');
-            }
-            if (_step == 3) {
-                d3.selectAll('#v1').attr('src', 'V3.PNG');
-            }
-            if (_step == 4) {
-                d3.selectAll('#v1').attr('src', 'V4.PNG');
-            }
-            return;
-        }
+                d3.select('#v1')
+                  .transition() // Add a transition
+                  .duration(500) // Specify the duration in milliseconds
+                  .style('opacity', 0) // Fade out
+                  .on('end', function () {
+                    d3.select(this)
+                      .attr('src', 'V2.PNG') // Update the image source
+                      .transition() // Add another transition
+                      .duration(500)
+                      .style('opacity', 1); // Fade back in
+                  });
+              }
+              if (_step == 3) {
+                d3.select('#v1')
+                  .transition()
+                  .duration(500)
+                  .style('opacity', 0)
+                  .on('end', function () {
+                    d3.select(this)
+                      .attr('src', 'V3.PNG')
+                      .transition()
+                      .duration(500)
+                      .style('opacity', 1);
+                  });
+              }
+              if (_step == 4) {
+                d3.select('#v1')
+                  .transition()
+                  .duration(500)
+                  .style('opacity', 0)
+                  .on('end', function () {
+                    d3.select(this)
+                      .attr('src', 'V4.PNG')
+                      .transition()
+                      .duration(500)
+                      .style('opacity', 1);
+                  });
+              }
+              
+          }
+          
     }
 
     function applyStyles(styles) {
@@ -294,7 +325,7 @@ function initScrollama({ onStepProgress = () => {} } = {}) {
 document.getElementById("story").innerHTML = stage1Content;
 
 
-const parallaxBg = document.getElementById('parallax-bg');
+let parallaxBg = document.getElementById('parallax-bg');
 //         // using d3 for convenience
 var main = d3.select("main");
 var scrolly;
@@ -730,8 +761,11 @@ window.addEventListener("scroll", () => {
         stage = 5;
         document.getElementById("story").innerHTML = `
             <section id="outro"></section>
-            <section><article><img width="100%" src="moneyball.JPG" /></article></section>
-            <section style="height: 50vh;"></section>
+            
+            
+        <div class="parallax-container" style="margin-top: 100vh;">
+            <div id="parallax-bg" style="background-image: url('moneyball.JPG');"></div>
+        </div>
             <section id="scrolly">
                 <article>
 <div class="step" data-step="1">
@@ -781,7 +815,8 @@ window.addEventListener("scroll", () => {
         `;
 
 
-
+        parallaxBg = document.getElementById('parallax-bg');
+        //         // using d3 for convenience
         applyStyles(sideScrollStyle);
         initScrollama();
         

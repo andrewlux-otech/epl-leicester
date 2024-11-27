@@ -6,8 +6,6 @@ let stage = 1;
 
 // Load Stage 1 Content
 const stage1Content = `
-
-
 <div class="parallax-container">
     <div id="parallax-bg" style="background-image: url('leicester.JPG');"></div>
 </div>
@@ -15,21 +13,35 @@ const stage1Content = `
     <div id="parallax-bg-2" style="background-image: url('champions.JPG');"></div>
 </div>
 
+<h1 style="text-align: center; color: white; font-size: 96px;">5000 - 1</h1>
+<h2 style="text-align: center; color: white; font-size: 72px;">Leicester City's Fairytale</h2>
+
 <section style="height: 70vh;"></section>
     <section id="scrolly">
         <article>
-            <div class="step" data-step="1">
+           <div class="step" data-step="1">
             <div  id="players">
                     <img src="vardy.WEBP" width="400px" />
                     <img src="kante.WEBP" width="400px" />
                     <img src="maharez.WEBP" width="400px" />
                     </div>
             </div>
+            <div class="step" data-step="2" style="max-width: 40rem;">
+        <p style="background-color: black; border-radius: 20px;"><strong>Leicester City's 2015/16 fairytale</strong> defied conventional soccer wisdom. While other teams dominated possession, Leicester relied on a counter-attacking strategy to win the title.</p>
+        <p style="background-color: black; border-radius: 20px;"><strong>One of the greatest underdog tales in sports history</strong> is Leicester City's surprising victory in the English Premier League season of 2015–16. The team was given <strong>5000-to-1 odds</strong> to win the championship at the beginning of the season. Leicester City surprised everyone by winning the league and doing so in a way that went against accepted soccer measurements and conventions.</p>
+        <p style="background-color: black; border-radius: 20px;"><strong>Ball possession</strong> is valued highly in soccer, according to conventional knowledge, and teams that dominate possession are frequently thought to have a higher chance of winning. Leicester City, however, reversed this notion. They averaged just <strong>43% possession</strong>, one of the lowest among the league's champions in recent memory. In contrast, other elite clubs dominated games with prolonged stretches of possession, often surpassing <strong>55%</strong>.</p>
+        </div>
+        <div class="step" data-step="3" style="max-width: 40rem;">
+        <p style="background-color: black; border-radius: 20px;"><strong>Their success was based on their counter-attacking strategy.</strong> Leicester enticed their opponents into overcommitting by giving up possession and playing compact defense, then quickly responded. Key players like <strong>Jamie Vardy</strong> and <strong>Riyad Mahrez</strong> played a crucial role in carrying out this plan; Vardy frequently converted clinical opportunities that Mahrez's ingenuity and vision generated. In addition to being effective, this strategy was devastatingly so.</p>
+        <p style="background-color: black; border-radius: 20px;">Furthermore, Leicester benefited from a unique confluence of circumstances, including a team free of injuries for the majority of the season, exceptional performances by up-and-coming talent like <strong>N'Golo Kanté</strong>, and the inability of established powerhouses like Manchester United, Arsenal, and Chelsea to remain consistent. Leicester's tenacity and camaraderie became legendary under manager <strong>Claudio Ranieri</strong>'s leadership.</p>
+        </div>
+         
         </article>
     </section>
 
-    <section style="height: 250vh;"></section>
+    <section style="height: 100vh;"></section>
 `;
+
 
 // Load Stage 2 Content
 // const stageKanteContent = `
@@ -254,7 +266,7 @@ const stageVardyContent = `
         parallaxBg.style.transform = `translateY(${scrollPosition * 0.3}px)`;
         
         parallaxBg2.style.transform = `translateY(${scrollPosition * 0.5}px)`;
-        parallaxBg2.style.marginTop = `${1100 - scrollPosition / 3}px`;
+        parallaxBg2.style.marginTop = `${1300 - scrollPosition / 3}px`;
       }
   
       // Attach event listener to the window for parallax scrolling
@@ -328,7 +340,7 @@ let parallaxBg = document.getElementById('parallax-bg');
 
 let parallaxBg2 = document.getElementById('parallax-bg-2');
 
-parallaxBg2.style.marginTop = `1100px`;
+parallaxBg2.style.marginTop = `1300px`;
 //         // using d3 for convenience
 var main = d3.select("main");
 var scrolly;

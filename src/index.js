@@ -798,7 +798,7 @@ let pictureContainer;
 
             <section id="outro"></section>
             
-            <section id="scrolly">
+            <section id="scrolly" style="background-color: white;">
                 <article>
 <div class="step" data-step="1">
     <p><strong>Moneyball: Revolutionizing Sports Recruitment</strong></p>
@@ -850,9 +850,9 @@ let pictureContainer;
 
         // Define scroll points
         const crawlInStart = 100; // Start crawling in after 100px of scroll
-        const crawlInEnd = 500;   // Finish crawling in by 500px
-        const scrollUpStart = 500; // Start scrolling up after 500px
-        const scrollUpEnd = 1000;  // Finish scrolling up by 1000px
+        const crawlInEnd = 800;   // Finish crawling in by 500px
+        const scrollUpStart = 800; // Start scrolling up after 500px
+        const scrollUpEnd = 1500;  // Finish scrolling up by 1000px
 
         // Event listener for scroll
         window.addEventListener('scroll', () => {
@@ -940,4 +940,132 @@ let pictureContainer;
         return;
     }
   }
+
+  if (stage === 5) {
+    
+    if (scrollPosition >= documentHeight) {
+    stage = 6;
+
+            document.getElementById("story").innerHTML = `
+            <section style="height: 100vh;"></section>
+    <section id="scrolly">
+        <figure>
+        <svg id="line-chart"></svg>
+    </figure>
+        <article style="max-width: 40rem;">
+             <div class="step" data-index="0" style="opacity: 0;"></div>
+  <div class="step" data-index="1"><p>Despite average offensive metrics, Leicester maximized their opportunities and showcased defensive resilience. Their 2015/16 season was an anomaly in Premier League history, driven by efficiency rather than dominance. Their offensive statistics were mediocre in comparison to other championship-winning teams, but what made them stand out was their capacity to seize opportunities and withstand pressure.</p></div>
+
+  <div class="step" data-index="2"><p>Leicester scored 68 goals, which is in close agreement with their xG of 66, according to the expected goals (xG) metric. This effectiveness demonstrates that they made the most of their opportunities even if they didn't generate many more than their rivals. Jamie Vardy and Riyad Mahrez were among the key players who made sure that even half-chances frequently resulted in goals.</p></div>
+
+  <div class="step" data-index="3"><p>Their success was primarily due to their defensive prowess. Their ability to nullify opponent assaults was demonstrated by their regularly better-than-expected xG against, which was lower than the league average. Important contributions were made by their disciplined backline, which remained resilient under duress, and N'Golo Kanté, whose unwavering work ethic supported their midfield. Kasper Schmeichel, the goalie, also had an exceptional season, making crucial saves at crucial times.</p></div>
+
+  <div class="step" data-index="4"><p>The graph illustrates Leicester's impressive goal differential in the 2015–16 campaign as opposed to their difficulties in the 2016–17 campaign. Even though they kept a large portion of their team, their performance declined sharply, highlighting the exceptional coincidence of circumstances needed to win the championship. Leicester's success was the result of a confluence of luck, strategy, and unity rather than just skill. Their triumph is a permanent reminder that in athletics, effectiveness and faith can triumph over strength and disadvantage.</p></div>
+
+
+        </article>
+    </section>
+
+    <section style="height: 250vh;"></section>
+            `;
+    const data = [{
+        "season": "2013/14",
+        "differential": -7
+    }, {
+        "season": "2014/15",
+        "differential": -2
+
+    }, {
+        "season": "2015/16",
+        "differential": 32
+
+    }, {
+        "season": "2016/17",
+        "differential": -15
+
+    }, {
+        "season": "2017/18",
+        "differential": -2
+
+    }];
+
+    // Set dimensions
+const margin = { top: 20, right: 20, bottom: 50, left: 50 };
+const width = window.innerWidth - margin.left - margin.right;
+const height = 500 - margin.top - margin.bottom;
+
+    // Create SVG
+const svg = d3
+.select("#line-chart")
+.attr("width", width + margin.left + margin.right)
+.attr("height", height + margin.top + margin.bottom)
+.append("g")
+.attr("transform", `translate(${margin.left},${margin.top})`);
+
+// Scales
+const x = d3
+.scalePoint()
+.domain(data.map((d) => d.season))
+.range([0, width]);
+
+const y = d3
+.scaleLinear()
+.domain([d3.min(data, (d) => d.differential), d3.max(data, (d) => d.differential)])
+.range([height, 0]);
+
+// Axes
+svg.append("g").attr("class", "x-axis").style("fill", "black").attr("transform", `translate(0,${height})`).call(d3.axisBottom(x));
+svg.append("g").attr("class", "y-axis").style("fill", "black").call(d3.axisLeft(y));
+
+// Style axes with D3
+svg.selectAll(".x-axis text")
+   .style("fill", "black")
+   .style("font-size", "12px");
+
+svg.selectAll(".y-axis text")
+   .style("fill", "black")
+   .style("font-size", "12px");
+
+// Line generator
+const line = d3
+.line()
+.x((d) => x(d.season))
+.y((d) => y(d.differential))
+.curve(d3.curveMonotoneX);
+
+// Append path
+const path = svg
+  .append("path")
+  .datum(data)
+  .attr("fill", "none")
+  .attr("stroke", "#FDBE11")
+  .attr("stroke-width", 2)
+  .attr("d", line);
+  // Append the title to the SVG
+svg.append("text")
+.attr("x", width / 2) // Center the title horizontally
+.attr("y", -10) // Position above the chart
+.attr("text-anchor", "middle") // Center align the text
+.style("font-size", "16px") // Set font size
+.style("font-weight", "bold") // Make the text bold
+.style("fill", "black") // Text color
+.text("Goal Differential Across Seasons");
+
+
+const totalLength = path.node().getTotalLength();
+
+path
+  .attr("stroke-dasharray", `${totalLength} ${totalLength}`)
+  .attr("stroke-dashoffset", totalLength);
+
+const steps = d3.selectAll(".step").nodes();
+initScrollama({ onStepProgress: (response) => {
+    const index = +response.element.dataset.index;
+    const progress = response.progress;
+
+    // Adjust stroke-dashoffset based on progress
+    path.attr("stroke-dashoffset", totalLength * (1 - (index + progress) / steps.length));
+  }});
+  }
+}
 });

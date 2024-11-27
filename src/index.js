@@ -954,9 +954,179 @@ let pictureContainer;
   }
 
   if (stage === 5) {
+    if (scrollPosition >= documentHeight) {
+        stage = 6;
+        document.getElementById("story").innerHTML = `
+            <section style="height: 100vh;"></section>
+    <section id="scrolly">
+        <figure>
+        <svg id="bar-chart"></svg>
+    </figure>
+        <article style="max-width: 40rem;">
+  <div class="step" data-index="1" style="opacity: 0;"></div>
+
+  
+  <div class="step" data-index="2" style="opacity: 0;"></div>
+  
+  <div class="step" data-index="3" style="opacity: 0;"></div>
+  
+  <div class="step" data-index="4"><p style="background-color: black; border-radius: 20px;">The Leicester City's 2015–16 Premier League victory was collaboration and strategy rather than ball possession. They were excellent at counterattacking quickly, turning small chances into crucial ones. Riyad Mahrez's inventiveness and Jamie Vardy's speed, combined with accurate passes from Marc Albrighton and Mahrez, guaranteed outstanding goal-scoring effectiveness. Their victory was genuinely inspirational because of their well-organized, unified play, which demonstrated that good execution is more important than controlling possession.</p></div>
+
+        </article>
+    </section>
+
+    <section style="height: 100vh;"></section>
+            `;
+
+        const data = [
+            { Squad: "Aston Villa", "G+A": 43 },
+            { Squad: "Watford", "G+A": 56 },
+            { Squad: "West Brom", "G+A": 57 },
+            { Squad: "Crystal Palace", "G+A": 59 },
+            { Squad: "Norwich City", "G+A": 65 },
+            { Squad: "Swansea City", "G+A": 66 },
+            { Squad: "Stoke City", "G+A": 69 },
+            { Squad: "Bournemouth", "G+A": 71 },
+            { Squad: "Sunderland", "G+A": 74 },
+            { Squad: "Manchester Utd", "G+A": 77 },
+            { Squad: "Newcastle Utd", "G+A": 77 },
+            { Squad: "Chelsea", "G+A": 95 },
+            { Squad: "Everton", "G+A": 100 },
+            { Squad: "West Ham", "G+A": 102 },
+            { Squad: "Southampton", "G+A": 103 },
+            { Squad: "Leicester City", "G+A": 111 },
+            { Squad: "Liverpool", "G+A": 112 },
+            { Squad: "Arsenal", "G+A": 115 },
+            { Squad: "Tottenham", "G+A": 118 },
+            { Squad: "Manchester City", "G+A": 124 }
+          ];
+          
+          // Dimensions
+          const margin = { top: 50, right: 20, bottom: 75, left: 50 };
+          const width = window.innerWidth - margin.left - margin.right;
+          const height = 500 - margin.top - margin.bottom;
+          
+          // Create SVG
+          const svg = d3
+            .select("#bar-chart")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left}, ${margin.top})`);
+          
+          // Scales
+          const x = d3
+            .scaleBand()
+            .domain(data.map((d) => d.Squad))
+            .range([0, width])
+            .padding(0.1);
+          
+          const y = d3
+            .scaleLinear()
+            .domain([0, d3.max(data, (d) => d["G+A"])])
+            .range([height, 0]);
+          
+          // Axes
+          svg.append("g")
+            .attr("class", "x-axis")
+            .style("fill", "black")
+            .attr("transform", `translate(0, ${height})`)
+            .call(d3.axisBottom(x).tickSize(0).tickPadding(10))
+            .selectAll("text")
+            .style("font-size", "10px")
+            .style("text-anchor", "end")
+            .attr("transform", "rotate(-45)");
+          
+          svg.append("g")
+            .attr("class", "y-axis")
+            .style("fill", "black")
+            .call(d3.axisLeft(y).ticks(5));
+
+            // Style axes with D3
+svg.selectAll(".x-axis text")
+.style("fill", "black")
+.style("font-size", "12px");
+
+svg.selectAll(".y-axis text")
+.style("fill", "black")
+.style("font-size", "12px");
+          
+          // Bars
+          const bars = svg
+            .selectAll(".bar")
+            .data(data)
+            .enter()
+            .append("rect")
+            .style('fill', '#FDBE11')
+            .attr("class", "bar")
+            .attr("x", (d) => x(d.Squad))
+            .attr("y", height) // Start at the bottom
+            .attr("width", x.bandwidth())
+            .attr("height", 0); // Start with height 0
+
+            // Highlight a specific bar (e.g., "Leicester City") in reddish-orange
+bars.each(function (d) {
+    const bar = d3.select(this);
+    if (d.Squad === "Leicester City") {
+      bar.style("fill", "orangered");
+    }
+  });
+  
+  // Style the x-axis
+  svg.selectAll(".x-axis path, .x-axis line")
+    .style("stroke", "black"); // Correct the x-axis line color
+  
+  svg.selectAll(".x-axis text")
+    .style("fill", "black"); // Ensure tick labels are black
+
+    svg.append("text")
+.attr("x", width / 2) // Center the title horizontally
+.attr("y", -10) // Position above the chart
+.attr("text-anchor", "middle") // Center align the text
+.style("font-size", "24px") // Set font size
+.style("font-weight", "bold") // Make the text bold
+.style("fill", "white") // Text color
+.text("Efficiency Metrics: Goals Plus Assists");
+  
+          
+          
+          initScrollama({ onStepProgress: (response) => {
+            const index = +response.element.dataset.index; // Current step index (0 to 3)
+            const progress = response.progress; // Progress within the current step (0 to 1)
+
+            const barsPerStep = 5; // Number of bars to animate per step
+            const startBar = index * barsPerStep; // First bar to animate for this step
+            const endBar = startBar + barsPerStep; // Last bar to animate for this step
+
+            bars.each(function (d, i) {
+            const bar = d3.select(this);
+
+            if (i < startBar) {
+                // Fully grow bars from previous steps
+                bar
+                .attr("y", y(d["G+A"]))
+                .attr("height", height - y(d["G+A"]));
+            } else if (i >= startBar && i < endBar) {
+                // Partially grow bars for the current step
+                bar
+                .attr("y", y(d["G+A"] * progress))
+                .attr("height", height - y(d["G+A"] * progress));
+            } else {
+                // Reset bars for future steps
+                bar.attr("y", height).attr("height", 0);
+            }
+            });
+          
+            }});
+          
+          return;
+    }
+}
+
+  if (stage === 6) {
     
     if (scrollPosition >= documentHeight) {
-    stage = 6;
+    stage = 7;
 
             document.getElementById("story").innerHTML = `
             <section style="height: 100vh;"></section>
@@ -966,13 +1136,13 @@ let pictureContainer;
     </figure>
         <article style="max-width: 40rem;">
              <div class="step" data-index="0" style="opacity: 0;"></div>
-  <div class="step" data-index="1"><p>Despite average offensive metrics, Leicester maximized their opportunities and showcased defensive resilience. Their 2015/16 season was an anomaly in Premier League history, driven by efficiency rather than dominance. Their offensive statistics were mediocre in comparison to other championship-winning teams, but what made them stand out was their capacity to seize opportunities and withstand pressure.</p></div>
+  <div class="step" data-index="1"><p style="background-color: black; border-radius: 20px;">Despite average offensive metrics, Leicester maximized their opportunities and showcased defensive resilience. Their 2015/16 season was an anomaly in Premier League history, driven by efficiency rather than dominance. Their offensive statistics were mediocre in comparison to other championship-winning teams, but what made them stand out was their capacity to seize opportunities and withstand pressure.</p></div>
 
-  <div class="step" data-index="2"><p>Leicester scored 68 goals, which is in close agreement with their xG of 66, according to the expected goals (xG) metric. This effectiveness demonstrates that they made the most of their opportunities even if they didn't generate many more than their rivals. Jamie Vardy and Riyad Mahrez were among the key players who made sure that even half-chances frequently resulted in goals.</p></div>
+  <div class="step" data-index="2"><p style="background-color: black; border-radius: 20px;">Leicester scored 68 goals, which is in close agreement with their xG of 66, according to the expected goals (xG) metric. This effectiveness demonstrates that they made the most of their opportunities even if they didn't generate many more than their rivals. Jamie Vardy and Riyad Mahrez were among the key players who made sure that even half-chances frequently resulted in goals.</p></div>
 
-  <div class="step" data-index="3"><p>Their success was primarily due to their defensive prowess. Their ability to nullify opponent assaults was demonstrated by their regularly better-than-expected xG against, which was lower than the league average. Important contributions were made by their disciplined backline, which remained resilient under duress, and N'Golo Kanté, whose unwavering work ethic supported their midfield. Kasper Schmeichel, the goalie, also had an exceptional season, making crucial saves at crucial times.</p></div>
+  <div class="step" data-index="3"><p style="background-color: black; border-radius: 20px;">Their success was primarily due to their defensive prowess. Their ability to nullify opponent assaults was demonstrated by their regularly better-than-expected xG against, which was lower than the league average. Important contributions were made by their disciplined backline, which remained resilient under duress, and N'Golo Kanté, whose unwavering work ethic supported their midfield. Kasper Schmeichel, the goalie, also had an exceptional season, making crucial saves at crucial times.</p></div>
 
-  <div class="step" data-index="4"><p>The graph illustrates Leicester's impressive goal differential in the 2015–16 campaign as opposed to their difficulties in the 2016–17 campaign. Even though they kept a large portion of their team, their performance declined sharply, highlighting the exceptional coincidence of circumstances needed to win the championship. Leicester's success was the result of a confluence of luck, strategy, and unity rather than just skill. Their triumph is a permanent reminder that in athletics, effectiveness and faith can triumph over strength and disadvantage.</p></div>
+  <div class="step" data-index="4"><p style="background-color: black; border-radius: 20px;">The graph illustrates Leicester's impressive goal differential in the 2015–16 campaign as opposed to their difficulties in the 2016–17 campaign. Even though they kept a large portion of their team, their performance declined sharply, highlighting the exceptional coincidence of circumstances needed to win the championship. Leicester's success was the result of a confluence of luck, strategy, and unity rather than just skill. Their triumph is a permanent reminder that in athletics, effectiveness and faith can triumph over strength and disadvantage.</p></div>
 
 
         </article>
@@ -1002,7 +1172,7 @@ let pictureContainer;
     }];
 
     // Set dimensions
-const margin = { top: 20, right: 20, bottom: 50, left: 50 };
+const margin = { top: 50, right: 20, bottom: 50, left: 50 };
 const width = window.innerWidth - margin.left - margin.right;
 const height = 500 - margin.top - margin.bottom;
 
@@ -1058,9 +1228,9 @@ svg.append("text")
 .attr("x", width / 2) // Center the title horizontally
 .attr("y", -10) // Position above the chart
 .attr("text-anchor", "middle") // Center align the text
-.style("font-size", "16px") // Set font size
+.style("font-size", "24px") // Set font size
 .style("font-weight", "bold") // Make the text bold
-.style("fill", "black") // Text color
+.style("fill", "white") // Text color
 .text("Goal Differential Across Seasons");
 
 

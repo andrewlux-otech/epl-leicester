@@ -903,15 +903,15 @@ let pictureContainer;
 
         myStep = _step;
 
-                if (response.index === 0) {
-                  // Step 1: Move the picture into view from the right
-                  pictureContainer.style.right = '10%'; // Adjust final position as needed
-                }
+                // if (response.index === 0) {
+                //   // Step 1: Move the picture into view from the right
+                //   pictureContainer.style.right = '10%'; // Adjust final position as needed
+                // }
 
                 if (_step == 2) {
                     d3.select('#v1')
                         .transition() // Add a transition
-                        .duration(500) // Specify the duration in milliseconds
+                        .duration(200) // Specify the duration in milliseconds
                         .style('opacity', 0) // Fade out
                         .on('end', function () {
                         d3.select(this)
@@ -924,7 +924,7 @@ let pictureContainer;
                     if (_step == 3) {
                     d3.select('#v1')
                         .transition()
-                        .duration(500)
+                        .duration(200)
                         .style('opacity', 0)
                         .on('end', function () {
                         d3.select(this)
@@ -937,7 +937,7 @@ let pictureContainer;
                     if (_step == 4) {
                     d3.select('#v1')
                         .transition()
-                        .duration(500)
+                        .duration(200)
                         .style('opacity', 0)
                         .on('end', function () {
                         d3.select(this)

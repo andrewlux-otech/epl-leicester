@@ -1148,7 +1148,7 @@ bars.each(function (d) {
         </article>
     </section>
 
-    <section style="height: 250vh;"></section>
+    <section style="height: 100vh;"></section>
             `;
     const data = [{
         "season": "2013/14",
@@ -1248,6 +1248,66 @@ initScrollama({ onStepProgress: (response) => {
     // Adjust stroke-dashoffset based on progress
     path.attr("stroke-dashoffset", totalLength * (1 - (index + progress) / steps.length));
   }});
+  
+  return;
+  }
+}
+
+if (stage === 7) {
+    
+    if (scrollPosition >= documentHeight) {
+    stage = 8;
+
+            document.getElementById("story").innerHTML = `
+            
+            <div class="parallax-container">
+    <div id="parallax-bg" style="background-image: url('outliers.png'); background-size: auto;"></div>
+</div>
+<div class="parallax-container">
+    <div id="parallax-bg-2" style="background-image: url('end.png'); background-size: auto;"></div>
+</div>
+
+<section style="height: 100vh;"></section>
+    <section id="scrolly">
+        <article>
+            <div class="step" data-step="1" style="max-width: 40rem;">
+        <p style="background-color: black; border-radius: 20px;">Leicester’s fairytale win</strong> is a perfect example of how success can be the result of interconnected factors, each building upon the other, leading to the unexpected. It wasn’t about luck; it was about <strong>taking advantage of every opportunity</strong> and turning small advantages into a cumulative force.</p>
+         </div>
+            <div class="step" data-step="2" style="max-width: 40rem;">
+        <p style="background-color: black; border-radius: 20px;">
+  <em>Gladwell</em> would call this <strong>the power of timing</strong>.</p>
+         </div>
+        
+         
+        </article>
+    </section>
+
+    <section style="height: 100vh;"></section>
+            `;
+
+
+            document.querySelectorAll('.step').forEach((el) => el.style.height = 'auto !important');
+            
+            
+            var parallaxBg3 = document.getElementById('parallax-bg');
+            var parallaxBg4 = document.getElementById('parallax-bg-2');
+            
+            parallaxBg3.style.marginTop = '600px';
+            parallaxBg4.style.marginTop = `1800px`;
+
+            function handleParallaxScroll() {
+                const scrollPosition = window.scrollY;
+                parallaxBg3.style.transform = `translateY(${scrollPosition * 0.3}px)`;
+                
+                parallaxBg4.style.transform = `translateY(${scrollPosition * 0.5}px)`;
+                parallaxBg4.style.marginTop = `${1800 - scrollPosition / 3}px`;
+              }
+          
+              // Attach event listener to the window for parallax scrolling
+              window.addEventListener('scroll', handleParallaxScroll);
+            
+            
+            initScrollama();
   }
 }
 });

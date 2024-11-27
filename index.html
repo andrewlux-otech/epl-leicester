@@ -15,7 +15,7 @@
 		article {
 			position: relative;
 			padding: 0;
-			max-width: 20rem;
+			/* max-width: 20rem; */
 			margin: 0 auto;
 		}
 
@@ -87,19 +87,17 @@
 			margin-top: -75px;
 			z-index: 10;
 		}
-		#leicester {
-			background-image: url('leicester.JPG');
+		#parallax-bg {
 			background-repeat: no-repeat;
 			background-position-x: center;
-			height: 800px;
 		}
 		
-		#champions {
+		/* #champions {
 			background-image: url('champions.JPG');
 			background-repeat: no-repeat;
 			background-position-x: center;
 			height: 750px;
-		}
+		} */
 
 		#players {
 			width: 100%;
@@ -108,8 +106,43 @@
 			background-color: #FDBE11;
 			text-align: center;
 		}
+
+		.parallax-container {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			z-index: -1; /* Place behind foreground content */
+		}
+
+		#parallax-bg {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 150%; /* Larger than viewport to allow for movement */
+			background-size: cover;
+			background-position: center;
+			transform: translateY(0); /* Default transform */
+			will-change: transform; /* Optimize for performance */
+			z-index: -1;
+		}
+
+		/* article {
+			position: relative;
+			padding: 100px;
+			max-width: 600px;
+			margin: auto;
+		} 
+		.step {
+			margin-bottom: 50px;
+			padding: 20px;
+			border: 1px solid #ddd;
+			background: rgba(255, 255, 255, 0.9);
+		} */
   </style>
-  <script type="module" crossorigin src="/epl-leicester/assets/index-BMnDz8M7.js"></script>
+  <script type="module" crossorigin src="/epl-leicester/assets/index-BlCcwXcW.js"></script>
 </head>
 <body>
   <main id="story"></main>
